@@ -1,0 +1,41 @@
+{
+  "name": "Impossible: mornings vs afternoons",
+  "description": "Rahul is free only in the mornings and Priya only in the afternoons, so no slot can satisfy both. The solver must prove this and name the clashing rules.",
+  "timezone": "Asia/Kolkata",
+  "horizon": { "start": "2026-11-02", "days": 5 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Kick-off",
+    "duration_minutes": 60,
+    "participants": ["asha", "rahul", "priya"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+      "calendar": [
+        { "title": "Design review", "start": "2026-11-03T09:00", "end": "2026-11-03T10:30" }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+      "hard_constraints": [
+        { "type": "only_between", "start": "09:00", "end": "12:00" }
+      ]
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+      "hard_constraints": [
+        { "type": "only_between", "start": "14:00", "end": "18:00" }
+      ]
+    }
+  ]
+}
