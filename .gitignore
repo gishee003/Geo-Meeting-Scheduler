@@ -19,3 +19,6 @@ Thumbs.db
 
 # Personal explanation notes
 docs/
+
+# Negotiation logs
+runs/

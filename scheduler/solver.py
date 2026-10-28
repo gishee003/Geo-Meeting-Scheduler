@@ -489,8 +489,12 @@ class MeetingSolver:
         return (f"{p.name} would have to leave {vname} by {sc.fmt(t.onward.depart, p.tz)} to make "
                 f"{t.gap.next.label}, but the meeting ends at {sc.fmt(end, p.tz)}")
 
-    def explain(self, verdict: Verdict) -> str:
-        """Plain-language explanation of a verdict (later fed back to agents)."""
+    def explain(self, verdict: Verdict, public: bool = False) -> str:
+        """Plain-language explanation of a verdict.
+
+        With public=True (what negotiating agents see) only the hard-constraint
+        outcome is reported; private preferences and travel plans are left out.
+        """
         sc = self.sc
         slot = f"{sc.fmt(verdict.start)}-{sc.to_datetime(verdict.start + self.D):%H:%M} ({sc.display_tz.key})"
         vi = self._venue_index(verdict.venue)
@@ -502,6 +506,8 @@ class MeetingSolver:
         else:
             lines.append(f"INVALID: {slot} breaks {len(verdict.violations)} hard constraint(s):")
             lines += [f"  - {c.detail(verdict.start, vi) if c.detail else c.text}" for c in verdict.violations]
+        if public:
+            return "\n".join(lines)
         if verdict.valid and self.geo:
             lines.append("Travel plan:")
             for p in sc.participants():

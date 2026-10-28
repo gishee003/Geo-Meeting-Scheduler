@@ -17,13 +17,36 @@ python -m scheduler.cli data/scenarios/05_multi_city_flights.json --verify 2026-
 python -m pytest
 ```
 
+### Negotiation (Phase 3)
+```bash
+# Offline: rule-based agents, no API key needed
+python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --agents heuristic
+
+# Claude agents (needs ANTHROPIC_API_KEY)
+set ANTHROPIC_API_KEY=sk-ant-...        # Windows cmd   (PowerShell: $env:ANTHROPIC_API_KEY="sk-ant-...")
+python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json
+python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --no-solver   # LLM-only baseline
+```
+Options:
+- `--max-rounds N` (default 8)
+- `--model` (default `claude-opus-5-5`)
+- `--effort low|medium|high|xhigh|max` (default `low`, to keep cost down)
+- `--save PATH`
+
+Each run prints the conversation live and writes a JSON log to `runs/`.
+
 ## Layout
 | Path | Purpose |
 |---|---|
 | `scheduler/models.py` | Scenario data model and JSON loader. All times become integer minutes since the horizon start (UTC) |
 | `scheduler/geo.py` | Locations, ground-travel estimates, flight timetable search |
 | `scheduler/solver.py` | Z3 encoding: `verify`, `suggest`, `diagnose`, `explain` |
-| `scheduler/cli.py` | Command-line runner |
+| `scheduler/cli.py` | Command-line runner for the solver |
+| `scheduler/protocol.py` | Shared public board: proposals, replies, referee messages |
+| `scheduler/agents.py` | `LLMAgent` (Claude) and `HeuristicAgent` (offline), one per participant |
+| `scheduler/llm.py` | Claude API wrapper: structured JSON output, refusal fallbacks, token usage |
+| `scheduler/negotiation.py` | Negotiation loop with the solver as referee (or without, as a baseline) |
+| `scheduler/negotiate.py` | Command-line runner for negotiations |
 | `data/scenarios/` | Scenarios 01–03 (time only) and 04–06 (geography) |
 | `data/geo/world.json` | Offices, airports, travel parameters and an illustrative flight timetable |
 | `tests/` | Unit tests, including a brute-force cross-check of the solver |
@@ -64,6 +87,21 @@ python -m pytest
   - Trips over `max_drive_km` must fly, and only direct flights are used.
   - The timetable repeats daily.
   - Online participants can join from wherever they are.
+
+### Negotiation (Phase 3)
+- **One agent per participant.** An agent sees only its own person's calendar, rules, preferences and travel times, plus a shared public board.
+- **Each round:**
+  1. An agent proposes a time (and venue).
+  2. The **referee** (the full solver) verifies it. If it is invalid, the solver's plain-language reasons are posted to the board and the proposal never reaches the group.
+  3. Otherwise every other agent accepts or rejects, optionally with a counter-proposal.
+  4. If everyone accepts, the meeting is agreed.
+- **Getting unstuck:** after 4 rounds without agreement the referee posts 3 valid slots as hints. If the round limit is reached, it falls back to the solver's best slot. Impossible scenarios are diagnosed before any agent is called.
+- **Claude agents:**
+  - Each turn is one `claude-opus-5-5` call with structured JSON output (`output_config.format`). The schema limits the venue to the candidate ids.
+  - Server-side refusal fallbacks are on (`fallbacks: "default"`), and the system prompt is cached.
+  - Privacy: agents say "I'm busy then", and the referee's public messages leave out preferences and travel plans.
+- **`--no-solver`** removes the referee. The agreed slot is still checked afterwards, so the LLM-only baseline can be scored in Phase 4.
+- **Offline agents:** `HeuristicAgent` is a rule-based stand-in that uses a one-person solver for its own constraints. It makes runs reproducible and free, and powers the tests.
 
 ## Scenario format
 ```jsonc
