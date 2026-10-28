@@ -145,6 +145,16 @@ Each run prints the conversation live and writes a JSON log to `runs/`. The log 
   - Each turn is one LLM call constrained to a JSON schema; the schema limits the venue to the candidate ids. Gemini uses `response_json_schema` and Ollama uses `format`.
   - Temporary provider errors are retried, and each call has a time limit, so a busy model cannot hang a run.
   - Privacy: agents say "I'm busy then", and the referee's public messages leave out preferences and travel plans.
+- **When each outcome is decided.** One round = one proposal checked, plus the replies if it is valid.
+
+  | Outcome | With the referee (default) | Without the referee (`--no-solver`) |
+  |---|---|---|
+  | **Impossible** | Before round 1: no valid slot exists, so the run stops (0 rounds, no LLM calls) | Not detected; the agents keep trying |
+  | **Invalid proposal** | In the round it is made: rejected with reasons, and the next agent proposes | Not checked; it can be accepted |
+  | **Valid proposal** | In the round it is made: the other agents vote on it | Not checked |
+  | **Agreed** | Any round from 1 to `--max-rounds` (default 8), when everyone accepts; always valid | Any round; validity is checked once afterwards and reported as VALID or INVALID |
+  | **Hint** | After round 4 without agreement: 3 valid slots are posted | — |
+  | **Fallback** | After the last round: the solver's best valid slot is used | Status `no_agreement` (no fallback) |
 - **`--no-solver`** removes the referee. The agreed slot is still checked afterwards, so the LLM-only baseline can be scored in Phase 4.
 - **Offline agents:** `HeuristicAgent` is a rule-based stand-in that uses a one-person solver for its own constraints. It makes runs reproducible and free, and powers the tests.
 
