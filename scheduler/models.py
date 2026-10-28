@@ -13,6 +13,8 @@ from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from .geo import TravelModel, load_geo
+
 DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 
@@ -22,6 +24,7 @@ class Event:
     title: str
     start: int
     end: int
+    location: str | None = None  # location id; None means the person's base
 
 
 @dataclass
@@ -52,6 +55,11 @@ class Person:
     calendar: list[Event] = field(default_factory=list)
     hard_constraints: list[Rule] = field(default_factory=list)
     preferences: list[Rule] = field(default_factory=list)
+    # Geography (Phase 2). Each day the person starts at `base` no earlier than
+    # `earliest_departure` and must be back at `base` by `return_by` (local times).
+    base: str | None = None
+    earliest_departure: time = time(6, 0)
+    return_by: time | None = time(23, 0)
 
 
 @dataclass
@@ -59,6 +67,8 @@ class Meeting:
     title: str
     duration: int  # minutes
     participants: list[str]
+    venues: list[str] = field(default_factory=list)  # candidate location ids; empty = no geography
+    travel_objective: str = "total"                   # "total", "max" or "none"
 
 
 @dataclass
@@ -71,6 +81,14 @@ class Scenario:
     meeting: Meeting
     people: dict[str, Person]
     display_tz: ZoneInfo
+    travel: TravelModel | None = None
+
+    @property
+    def geo_enabled(self) -> bool:
+        return bool(self.meeting.venues)
+
+    def location_name(self, loc_id: str) -> str:
+        return self.travel.loc[loc_id].name if self.travel else loc_id
 
     @property
     def horizon_end(self) -> int:
@@ -129,17 +147,24 @@ def _parse_rule(raw: dict, soft: bool) -> Rule:
 
 
 def load_scenario(path: str | Path) -> Scenario:
-    return scenario_from_dict(json.loads(Path(path).read_text(encoding="utf-8")))
+    path = Path(path)
+    return scenario_from_dict(json.loads(path.read_text(encoding="utf-8")), base_dir=path.parent)
 
 
-def scenario_from_dict(data: dict) -> Scenario:
+def scenario_from_dict(data: dict, base_dir: str | Path = ".") -> Scenario:
     display_tz = ZoneInfo(data.get("timezone", "UTC"))
     horizon = data["horizon"]
     start_day = date.fromisoformat(horizon["start"])
     horizon_start = datetime.combine(start_day, time(0, 0), tzinfo=display_tz).astimezone(timezone.utc)
 
     m = data["meeting"]
-    meeting = Meeting(title=m["title"], duration=int(m["duration_minutes"]), participants=list(m["participants"]))
+    meeting = Meeting(
+        title=m["title"],
+        duration=int(m["duration_minutes"]),
+        participants=list(m["participants"]),
+        venues=list(m.get("venues", [])),
+        travel_objective=m.get("travel_objective", "total"),
+    )
 
     scenario = Scenario(
         name=data["name"],
@@ -151,6 +176,9 @@ def scenario_from_dict(data: dict) -> Scenario:
         people={},
         display_tz=display_tz,
     )
+    if "geo" in data:
+        geo = load_geo(Path(base_dir) / data["geo"])
+        scenario.travel = TravelModel(geo, horizon_start, scenario.horizon_days)
 
     for p in data["people"]:
         tz = ZoneInfo(p.get("timezone", data.get("timezone", "UTC")))
@@ -165,9 +193,11 @@ def scenario_from_dict(data: dict) -> Scenario:
                 title=e.get("title", "Busy"),
                 start=scenario.parse_local(e["start"], tz),
                 end=scenario.parse_local(e["end"], tz),
+                location=e.get("location"),
             )
             for e in p.get("calendar", [])
         ]
+        return_by = p.get("return_by", "23:00")
         scenario.people[p["id"]] = Person(
             id=p["id"],
             name=p.get("name", p["id"]),
@@ -176,9 +206,29 @@ def scenario_from_dict(data: dict) -> Scenario:
             calendar=calendar,
             hard_constraints=[_parse_rule(r, soft=False) for r in p.get("hard_constraints", [])],
             preferences=[_parse_rule(r, soft=True) for r in p.get("preferences", [])],
+            base=p.get("base"),
+            earliest_departure=_parse_time(p.get("earliest_departure", "06:00")),
+            return_by=_parse_time(return_by) if return_by else None,
         )
 
     missing = [pid for pid in meeting.participants if pid not in scenario.people]
     if missing:
         raise ValueError(f"Unknown participants in meeting: {missing}")
+    if scenario.geo_enabled:
+        _check_geo(scenario)
     return scenario
+
+
+def _check_geo(sc: Scenario) -> None:
+    if sc.travel is None:
+        raise ValueError("Meeting lists venues but the scenario has no 'geo' file")
+    known = sc.travel.loc
+    used = list(sc.meeting.venues)
+    for p in sc.participants():
+        if p.base is None:
+            raise ValueError(f"{p.id} needs a 'base' location when the meeting has venues")
+        used.append(p.base)
+        used += [e.location for e in p.calendar if e.location]
+    unknown = sorted({u for u in used if u not in known})
+    if unknown:
+        raise ValueError(f"Unknown location ids: {unknown}")

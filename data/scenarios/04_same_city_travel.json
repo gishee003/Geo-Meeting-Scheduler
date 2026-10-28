@@ -1,0 +1,46 @@
+{
+  "name": "Same city, two offices",
+  "description": "Three colleagues in Bengaluru, two candidate offices about 50 minutes apart by road. Monday 11:00 at Electronic City is free on every calendar, but Asha's workshop in Koramangala ends at 11:00, so she cannot get there in time.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 1 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Design huddle",
+    "duration_minutes": 60,
+    "participants": ["asha", "rahul", "priya"],
+    "venues": ["blr_ec_office", "blr_kor_office"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_kor_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Client workshop", "start": "2026-11-02T09:00", "end": "2026-11-02T11:00", "location": "blr_kor_office" }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Vendor visit", "start": "2026-11-02T13:00", "end": "2026-11-02T14:00", "location": "blr_ec_office" }
+      ]
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "preferences": [
+        { "type": "prefer_time_window", "start": "09:00", "end": "12:00", "weight": 2 }
+      ]
+    }
+  ]
+}

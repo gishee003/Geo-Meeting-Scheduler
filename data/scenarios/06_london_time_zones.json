@@ -1,0 +1,49 @@
+{
+  "name": "Bengaluru and London",
+  "description": "Emma works in London (GMT, 5h30 behind India in November). A same-day trip between the cities is impossible, so the meeting must be online, inside the short overlap of both teams' working hours.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 3 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Cross-site planning",
+    "duration_minutes": 60,
+    "participants": ["asha", "rahul", "emma"],
+    "venues": ["blr_ec_office", "lon_office", "online"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Hiring panel", "start": "2026-11-02T14:00", "end": "2026-11-02T18:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_in_person", "weight": 1 }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "10:00", "end": "19:00" }
+    },
+    {
+      "id": "emma",
+      "name": "Emma",
+      "timezone": "Europe/London",
+      "base": "lon_office",
+      "working_hours": { "start": "09:00", "end": "17:00" },
+      "calendar": [
+        { "title": "Team standup", "start": "2026-11-03T09:00", "end": "2026-11-03T10:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_time_window", "start": "10:00", "end": "12:00", "weight": 2 }
+      ]
+    }
+  ]
+}

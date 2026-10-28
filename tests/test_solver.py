@@ -17,15 +17,27 @@ def at(solver: MeetingSolver, text: str) -> int:
     return sc.parse_local(text, sc.display_tz)
 
 
-def brute_force(solver: MeetingSolver) -> dict[int, int]:
-    """All valid starts -> preference score, by checking every slot directly."""
+def brute_force(solver: MeetingSolver) -> dict:
+    """All valid (start, venue) -> verdict, by checking every slot and venue directly."""
     sc = solver.sc
     out = {}
     for start in range(0, sc.horizon_end, sc.slot_minutes):
-        v = solver.verify(start)
-        if v.valid:
-            out[start] = v.score
+        for venue in solver.venues or [None]:
+            v = solver.verify(start, venue)
+            if v.valid:
+                out[(start, venue)] = v
     return out
+
+
+def rank(solver: MeetingSolver, v) -> tuple:
+    """The solver's lexicographic objective: preferences, then travel, then earliest."""
+    mode = solver.sc.meeting.travel_objective
+    travel = 0
+    if v.travel and mode == "total":
+        travel = sum(v.travel.values())
+    elif v.travel and mode == "max":
+        travel = max(v.travel.values())
+    return (-v.score, travel, v.start)
 
 
 # --- data model -----------------------------------------------------------------
@@ -100,8 +112,8 @@ def test_solver_matches_brute_force(name):
     assert s.diagnose().feasible == bool(truth)
     opts = s.suggest(1)
     if truth:
-        assert opts[0].start in truth
-        assert opts[0].verdict.score == max(truth.values())
+        assert (opts[0].start, opts[0].venue) in truth
+        assert rank(s, opts[0].verdict) == min(rank(s, v) for v in truth.values())
     else:
         assert opts == []
 

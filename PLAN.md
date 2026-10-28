@@ -145,7 +145,7 @@ Scheduling also has to consider **where** people are:
 
 ## 5. Progress tracker
 - [x] Phase 1: Foundations and core solver *(done 26 Oct 2026: Z3 verify/suggest/diagnose/explain, 3 scenarios, 14 tests incl. brute-force cross-check)*
-- [ ] Phase 2: Geographical constraints
+- [x] Phase 2: Geographical constraints *(done 28 Oct 2026: venues, road + flight travel, same-day return, time zones, travel objective, 3 geo scenarios, 33 tests total)*
 - [ ] Phase 3: LLM agents and negotiation
 - [ ] Phase 4: Evaluation
 - [ ] Phase 5: Demo UI

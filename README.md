@@ -13,6 +13,7 @@ pip install -r requirements.txt
 ```bash
 python -m scheduler.cli data/scenarios/01_simple_team_sync.json
 python -m scheduler.cli data/scenarios/01_simple_team_sync.json --verify 2026-11-03T10:00 -k 5
+python -m scheduler.cli data/scenarios/05_multi_city_flights.json --verify 2026-11-03T10:00@bom_office
 python -m pytest
 ```
 
@@ -20,9 +21,11 @@ python -m pytest
 | Path | Purpose |
 |---|---|
 | `scheduler/models.py` | Scenario data model and JSON loader. All times become integer minutes since the horizon start (UTC) |
+| `scheduler/geo.py` | Locations, ground-travel estimates, flight timetable search |
 | `scheduler/solver.py` | Z3 encoding: `verify`, `suggest`, `diagnose`, `explain` |
 | `scheduler/cli.py` | Command-line runner |
-| `data/scenarios/` | Test scenarios (easy, trade-off, impossible) |
+| `data/scenarios/` | Scenarios 01–03 (time only) and 04–06 (geography) |
+| `data/geo/world.json` | Offices, airports, travel parameters and an illustrative flight timetable |
 | `tests/` | Unit tests, including a brute-force cross-check of the solver |
 
 ## How the solver works
@@ -38,6 +41,29 @@ python -m pytest
 - **`suggest(k)`** returns the k best valid slots, spaced at least one meeting-length apart.
 - **`diagnose()`** handles the case where no slot exists: it returns a minimal unsat core, i.e. the smallest set of rules that clash.
 - **`explain(...)`** turns verdicts into plain English. These explanations are what the LLM agents will receive in Phase 3.
+
+### Geography (Phase 2)
+- **Second variable:** `V` is the index of the chosen venue in `meeting.venues`. A venue can be an office or `online`.
+- **Anchors:** each person's day is a chain of fixed points:
+  1. leave base (not before `earliest_departure`, default 06:00)
+  2. calendar events, each at its `location`
+  3. be back at base by `return_by` (default 23:00)
+
+  The meeting must fit in a gap between two anchors.
+- **Precomputed travel times:** for every (gap, venue), `geo.py` works out two numbers in plain Python, which enter Z3 as constants:
+  - **EA**, the earliest arrival at the venue, by road or using the flight timetable;
+  - **LD**, the latest departure from the venue that still makes the next anchor.
+
+  Each person then gets two labelled constraints:
+  - `reach_venue`: `in_gap ∧ V=v → S ≥ EA`
+  - `onward_travel`: `in_gap ∧ V=v → S+D ≤ LD`
+- **Objective order:** preference score, then total travel (`travel_objective: "total"`; use `"max"` for fairness or `"none"` to switch it off), then the earliest start.
+- **Valid proposals** come with a travel plan: the latest possible departure, the exact flights, and the trip onward or home.
+- **Simplifications:**
+  - Ground time is great-circle distance × road factor, at city/highway speeds.
+  - Trips over `max_drive_km` must fly, and only direct flights are used.
+  - The timetable repeats daily.
+  - Online participants can join from wherever they are.
 
 ## Scenario format
 ```jsonc
@@ -58,6 +84,19 @@ python -m pytest
 ```
 Calendar times are given in the person's own time zone.
 
+Geography fields (all optional; if `venues` is missing, the scenario behaves as in Phase 1):
+```jsonc
+{
+  "geo": "../geo/world.json",                       // relative to the scenario file
+  "meeting": { "venues": ["bom_office", "del_office", "online"], "travel_objective": "total" },
+  "people": [{
+    "base": "blr_ec_office",                        // required when venues are given
+    "earliest_departure": "06:00", "return_by": "23:00",   // return_by: null = no same-day return
+    "calendar": [{ "title": "...", "start": "...", "end": "...", "location": "blr_kor_office" }]
+  }]
+}
+```
+
 ### Rule types
 Each rule type below can be used as a hard constraint or as a soft preference (soft preferences also take a `weight`).
 
@@ -69,3 +108,7 @@ Each rule type below can be used as a hard constraint or as a soft preference (s
 | — | `prefer_days` | `days` | The meeting falls on one of these weekdays |
 | `unavailable` | — | `start`, `end` (datetimes), `label` | Absent for a date range (e.g. leave) |
 | — | `buffer_around_events` | `minutes` | Leave a gap around existing events |
+| `in_person_only` | `prefer_in_person` | — | The venue is not `online` |
+| `no_flying` | `avoid_flying` | — | The venue can be reached from base without flying |
+| `max_travel_minutes` | `prefer_max_travel_minutes` | `minutes` | One-way door-to-door travel from base is within the limit |
+| `allowed_venues` | `prefer_venues` | `venues` | The venue is one of these |

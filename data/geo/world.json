@@ -1,0 +1,43 @@
+{
+  "note": "Coordinates are real. The flight timetable is ILLUSTRATIVE: routes and durations resemble real ones, but flight numbers and times are made up for this project.",
+
+  "travel": {
+    "road_factor": 1.3,
+    "city_speed_kmh": 22,
+    "highway_speed_kmh": 45,
+    "city_threshold_km": 15,
+    "ground_overhead_minutes": 10,
+    "max_drive_km": 300,
+    "checkin_minutes": 60,
+    "international_checkin_minutes": 150,
+    "deplane_minutes": 20,
+    "round_to_minutes": 5
+  },
+
+  "locations": [
+    { "id": "online",          "name": "Online (video call)",           "kind": "online" },
+    { "id": "blr_ec_office",   "name": "Bengaluru office (Electronic City)", "kind": "office", "city": "Bengaluru", "country": "IN", "timezone": "Asia/Kolkata",  "lat": 12.8452, "lon": 77.6602, "airport": "BLR" },
+    { "id": "blr_kor_office",  "name": "Bengaluru office (Koramangala)",     "kind": "office", "city": "Bengaluru", "country": "IN", "timezone": "Asia/Kolkata",  "lat": 12.9352, "lon": 77.6245, "airport": "BLR" },
+    { "id": "bom_office",      "name": "Mumbai office (BKC)",               "kind": "office", "city": "Mumbai",    "country": "IN", "timezone": "Asia/Kolkata",  "lat": 19.0660, "lon": 72.8650, "airport": "BOM" },
+    { "id": "del_office",      "name": "Delhi NCR office (Gurugram)",       "kind": "office", "city": "Gurugram",  "country": "IN", "timezone": "Asia/Kolkata",  "lat": 28.4950, "lon": 77.0895, "airport": "DEL" },
+    { "id": "lon_office",      "name": "London office (City)",              "kind": "office", "city": "London",    "country": "GB", "timezone": "Europe/London", "lat": 51.5155, "lon": -0.0922, "airport": "LHR" }
+  ],
+
+  "airports": [
+    { "id": "BLR", "name": "Bengaluru Airport (BLR)", "city": "Bengaluru", "country": "IN", "timezone": "Asia/Kolkata",  "lat": 13.1986, "lon": 77.7066 },
+    { "id": "BOM", "name": "Mumbai Airport (BOM)",    "city": "Mumbai",    "country": "IN", "timezone": "Asia/Kolkata",  "lat": 19.0896, "lon": 72.8656 },
+    { "id": "DEL", "name": "Delhi Airport (DEL)",     "city": "Delhi",     "country": "IN", "timezone": "Asia/Kolkata",  "lat": 28.5562, "lon": 77.1000 },
+    { "id": "LHR", "name": "London Heathrow (LHR)",   "city": "London",    "country": "GB", "timezone": "Europe/London", "lat": 51.4700, "lon": -0.4543 }
+  ],
+
+  "flights": [
+    { "number": "MR101", "from": "BLR", "to": "BOM", "duration_minutes": 105, "departures": ["06:00", "08:30", "11:00", "14:00", "17:30", "20:30"] },
+    { "number": "MR102", "from": "BOM", "to": "BLR", "duration_minutes": 105, "departures": ["06:30", "09:00", "12:00", "15:30", "18:30", "21:00"] },
+    { "number": "MR201", "from": "BLR", "to": "DEL", "duration_minutes": 170, "departures": ["06:15", "09:30", "13:00", "17:00", "20:00"] },
+    { "number": "MR202", "from": "DEL", "to": "BLR", "duration_minutes": 170, "departures": ["06:00", "09:00", "12:30", "16:30", "20:30"] },
+    { "number": "MR301", "from": "BOM", "to": "DEL", "duration_minutes": 130, "departures": ["07:00", "10:00", "13:30", "17:00", "20:00"] },
+    { "number": "MR302", "from": "DEL", "to": "BOM", "duration_minutes": 130, "departures": ["06:30", "09:30", "13:00", "16:30", "20:30"] },
+    { "number": "MR401", "from": "BLR", "to": "LHR", "duration_minutes": 630, "departures": ["07:00", "13:30"] },
+    { "number": "MR402", "from": "LHR", "to": "BLR", "duration_minutes": 600, "departures": ["11:00", "21:00"] }
+  ]
+}

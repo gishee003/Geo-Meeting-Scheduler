@@ -1,0 +1,56 @@
+{
+  "name": "Three cities, flights required",
+  "description": "Asha (Bengaluru), Rahul (Mumbai) and Priya (Delhi NCR) need a 90-minute in-person review. Everyone must fly there and back the same day, so the timetable decides which slots are possible.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 3 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Regional review",
+    "duration_minutes": 90,
+    "participants": ["asha", "rahul", "priya"],
+    "venues": ["blr_ec_office", "bom_office", "del_office", "online"],
+    "travel_objective": "total"
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Board prep", "start": "2026-11-02T15:00", "end": "2026-11-02T17:00", "location": "blr_ec_office" }
+      ],
+      "hard_constraints": [
+        { "type": "in_person_only" }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "bom_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Client lunch", "start": "2026-11-03T12:30", "end": "2026-11-03T14:00", "location": "bom_office" }
+      ],
+      "preferences": [
+        { "type": "avoid_flying", "weight": 2 }
+      ]
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "base": "del_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "hard_constraints": [
+        { "type": "max_travel_minutes", "minutes": 360 }
+      ],
+      "preferences": [
+        { "type": "prefer_days", "days": ["Tue", "Wed"], "weight": 1 }
+      ]
+    }
+  ]
+}

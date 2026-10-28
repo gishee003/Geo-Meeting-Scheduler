@@ -16,3 +16,6 @@ Thumbs.db
 
 # Course material (not for redistribution)
 *.pdf
+
+# Personal explanation notes
+docs/
