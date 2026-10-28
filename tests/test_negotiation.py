@@ -1,11 +1,9 @@
-import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
 from scheduler.agents import Agent, HeuristicAgent, LLMAgent
-from scheduler.llm import ClaudeLLM
+from scheduler.llm import LLM, LLMError
 from scheduler.models import load_scenario
 from scheduler.negotiation import Negotiation
 from scheduler.protocol import Proposal, Reply
@@ -105,33 +103,30 @@ def test_llm_only_mode_can_agree_on_invalid_slot():
     assert out.invalid_caught == 1
 
 
-# --- LLM agent with a fake Claude client ----------------------------------------
+# --- LLM agent with a scripted LLM ------------------------------------------------
 
-class FakeMessages:
-    def __init__(self, outputs, stop_reason="end_turn"):
+class ScriptedLLM(LLM):
+    """Returns pre-written JSON replies and records every request."""
+
+    name = "scripted"
+
+    def __init__(self, outputs, error=None):
+        super().__init__()
         self.outputs = list(outputs)
         self.calls = []
-        self.stop_reason = stop_reason
+        self.error = error
 
-    def create(self, **kwargs):
-        self.calls.append(kwargs)
-        text = json.dumps(self.outputs.pop(0)) if self.outputs else "{}"
-        return SimpleNamespace(
-            stop_reason=self.stop_reason,
-            content=[SimpleNamespace(type="text", text=text)],
-            usage=SimpleNamespace(input_tokens=1000, output_tokens=50),
-        )
-
-
-def fake_llm(outputs, stop_reason="end_turn"):
-    messages = FakeMessages(outputs, stop_reason)
-    client = SimpleNamespace(beta=SimpleNamespace(messages=messages))
-    return ClaudeLLM(client=client), messages
+    def json(self, system, prompt, schema):
+        self.calls.append({"system": system, "prompt": prompt, "schema": schema})
+        if self.error:
+            raise self.error
+        self._record(1000, 50)
+        return self.outputs.pop(0)
 
 
 def test_llm_agents_negotiate_with_referee():
     sc = scenario("05_multi_city_flights.json")
-    llm, fake = fake_llm([
+    llm = ScriptedLLM([
         {"message": "Mumbai Tuesday morning?", "start": "2026-11-03T10:00", "venue": "bom_office"},  # Asha: invalid
         {"message": "Then Tuesday 14:00 here in Mumbai.", "start": "2026-11-03T14:00", "venue": "bom_office"},  # Rahul
         {"decision": "accept", "message": "Works for me.", "counter_start": "", "counter_venue": ""},  # Asha
@@ -146,34 +141,37 @@ def test_llm_agents_negotiate_with_referee():
     assert llm.usage.calls == 4
 
     # The referee's reasons reached the next agent's prompt.
-    assert "cannot reach Mumbai office" in fake.calls[1]["messages"][0]["content"]
+    assert "cannot reach Mumbai office" in llm.calls[1]["prompt"]
 
 
-def test_llm_request_shape():
+def test_llm_schema_limits_venues():
     sc = scenario("05_multi_city_flights.json")
-    llm, fake = fake_llm([{"message": "x", "start": "2026-11-03T14:00", "venue": "bom_office"}])
+    llm = ScriptedLLM([{"message": "x", "start": "2026-11-03T14:00", "venue": "bom_office"}])
     LLMAgent(sc.people["asha"], sc, llm).propose(Negotiation(sc, []).board)
-    call = fake.calls[0]
-    assert call["model"] == "claude-opus-5-5"
-    assert call["fallbacks"] == "default"
-    fmt = call["output_config"]["format"]
-    assert fmt["type"] == "json_schema"
-    assert fmt["schema"]["properties"]["venue"]["enum"] == sc.meeting.venues
+    schema = llm.calls[0]["schema"]
+    assert schema["properties"]["venue"]["enum"] == sc.meeting.venues
+    assert schema["additionalProperties"] is False
+
+
+def test_llm_prompt_states_the_year():
+    sc = scenario("05_multi_city_flights.json")
+    asha = LLMAgent(sc.people["asha"], sc, ScriptedLLM([]))
+    assert "2026-11-02T10:00" in asha.system
+    assert "Monday 02 November 2026" in asha.system
 
 
 def test_llm_agent_profile_is_private():
     sc = scenario("05_multi_city_flights.json")
-    llm, _ = fake_llm([])
-    asha = LLMAgent(sc.people["asha"], sc, llm)
+    asha = LLMAgent(sc.people["asha"], sc, ScriptedLLM([]))
     assert "Board prep" in asha.system          # her own event
     assert "Client lunch" not in asha.system    # Rahul's event
     assert "about 305 min (flight needed)" in asha.system
 
 
-def test_llm_refusal_stops_negotiation():
+def test_llm_failure_stops_negotiation():
     sc = scenario("01_simple_team_sync.json")
-    llm, _ = fake_llm([{}], stop_reason="refusal")
+    llm = ScriptedLLM([], error=LLMError("All LLM providers failed (gemini: 503 busy)"))
     agents = [LLMAgent(p, sc, llm) for p in sc.participants()]
     out = Negotiation(sc, agents).run()
     assert out.status == "error"
-    assert "declined" in out.error
+    assert "503" in out.error

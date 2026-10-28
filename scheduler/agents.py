@@ -3,7 +3,8 @@
 Each agent knows only its own person's calendar, rules and preferences. Two
 implementations share one interface:
 
-  LLMAgent       - talks through Claude (the neural half of the system)
+  LLMAgent       - talks through an LLM: Gemini or a local Ollama model
+                   (the neural half of the system)
   HeuristicAgent - deterministic, offline stand-in used for tests and for
                    running without an API key; it checks proposals against
                    its own person's rules with a one-person solver
@@ -17,7 +18,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import replace
 
-from .llm import ClaudeLLM
+from .llm import LLM
 from .models import Person, Scenario
 from .protocol import Board, Proposal, Reply
 from .solver import MeetingSolver
@@ -103,7 +104,7 @@ class HeuristicAgent(Agent):
 # -------------------------------------------------------------------------- LLM
 
 class LLMAgent(Agent):
-    def __init__(self, person: Person, scenario: Scenario, llm: ClaudeLLM, use_solver: bool = True):
+    def __init__(self, person: Person, scenario: Scenario, llm: LLM, use_solver: bool = True):
         super().__init__(person, scenario)
         self.llm = llm
         self.use_solver = use_solver
@@ -146,6 +147,9 @@ class LLMAgent(Agent):
         if sc.geo_enabled:
             lines.append(f"One-way travel from {sc.location_name(p.base)} to each candidate venue:")
             for v, minutes in zip(sc.meeting.venues, me.cost[p.id]):
+                if minutes == 0:
+                    lines.append(f"  - {sc.location_name(v)} [{v}]: no travel needed")
+                    continue
                 mode = "flight needed" if sc.travel.needs_flight(p.base, v) else "by road"
                 lines.append(f"  - {sc.location_name(v)} [{v}]: about {minutes} min ({mode})")
         return "\n".join(lines)
@@ -153,14 +157,14 @@ class LLMAgent(Agent):
     def _meeting(self) -> str:
         sc, m = self.sc, self.sc.meeting
         names = ", ".join(sc.people[pid].name for pid in m.participants)
-        last = sc.to_datetime(sc.horizon_end - 1)
+        first, last = sc.to_datetime(0), sc.to_datetime(sc.horizon_end - 1)
         lines = [
             f"Title: {m.title}",
             f"Duration: {m.duration} minutes",
             f"Participants: {names}",
-            f"Window: {sc.fmt(0)[:10]} to {last:%a %d %b} ({sc.horizon_days} days)",
-            f"Times are written in {sc.display_tz.key} as YYYY-MM-DDTHH:MM; starts must be on a "
-            f"{sc.slot_minutes}-minute boundary.",
+            f"Window: {first:%A %d %B %Y} to {last:%A %d %B %Y} ({sc.horizon_days} days)",
+            f"Times are written in {sc.display_tz.key} as YYYY-MM-DDTHH:MM (for example "
+            f"{first:%Y-%m-%d}T10:00); starts must be on a {sc.slot_minutes}-minute boundary.",
         ]
         if sc.geo_enabled:
             venues = ", ".join(f"{sc.location_name(v)} [{v}]" for v in m.venues)

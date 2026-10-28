@@ -7,7 +7,42 @@ AID 851 (Machine Reasoning) project. LLM agents negotiate a meeting time, and a 
 python -m venv .venv
 .venv\Scripts\activate          # Windows  (source .venv/bin/activate on Linux/macOS)
 pip install -r requirements.txt
+copy .env.example .env          # then put your GEMINI_API_KEY in .env
+ollama pull qwen3:4b            # optional: local fallback model (needs Ollama installed)
 ```
+
+## Quick test commands (Windows PowerShell)
+Run these from the project folder.
+
+```powershell
+# 1. Normal run: Gemini agents with the referee, falling back to Ollama if needed
+.venv\Scripts\python -m scheduler.negotiate data\scenarios\05_multi_city_flights.json
+
+# 2. Without the referee: the "AI alone" baseline
+.venv\Scripts\python -m scheduler.negotiate data\scenarios\05_multi_city_flights.json --no-solver
+
+# 3. Only the local model (run 'ollama pull qwen3:4b' first; close heavy apps)
+.venv\Scripts\python -m scheduler.negotiate data\scenarios\04_same_city_travel.json --providers ollama
+
+# 4. Offline rule-based agents: no AI, instant
+.venv\Scripts\python -m scheduler.negotiate data\scenarios\05_multi_city_flights.json --agents heuristic
+
+# 5. All automatic tests
+.venv\Scripts\python -m pytest -q
+```
+
+Swap the scenario file in any command to try another case:
+
+| File | What it tests |
+|---|---|
+| `01_simple_team_sync.json` | One office, calendars only |
+| `02_busy_week.json` | Packed calendars, trade-offs between preferences |
+| `03_impossible.json` | No possible slot; should stop immediately |
+| `04_same_city_travel.json` | Two offices 50 min apart |
+| `05_multi_city_flights.json` | Three cities, flights there and back |
+| `06_london_time_zones.json` | London plus India; should end up online |
+
+Compare commands 1 and 2: without the referee, check whether the agents agree on a slot that is actually impossible. The final summary marks it **INVALID**. Every run is saved as a JSON log in `runs\`.
 
 ## Run
 ```bash
@@ -22,18 +57,27 @@ python -m pytest
 # Offline: rule-based agents, no API key needed
 python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --agents heuristic
 
-# Claude agents (needs ANTHROPIC_API_KEY)
-set ANTHROPIC_API_KEY=sk-ant-...        # Windows cmd   (PowerShell: $env:ANTHROPIC_API_KEY="sk-ant-...")
+# LLM agents, using the first provider that works: Gemini Flash -> Gemini Flash-Lite -> Ollama
 python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json
+python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --providers ollama
 python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --no-solver   # LLM-only baseline
 ```
-Options:
+
+**LLM providers.** Copy `.env.example` to `.env` (git-ignored) and add your Gemini key. A provider without a key is skipped. If a provider fails mid-run (quota, network), the run switches to the next one and stays there.
+
+| Provider | Needs | Default model | Flag |
+|---|---|---|---|
+| Gemini | `GEMINI_API_KEY` (free tier at aistudio.google.com) | `gemini-3.8-flash`, then `gemini-3.5-flash-lite` | `--gemini-model` |
+| Ollama | [Ollama](https://ollama.com) installed, then `ollama pull qwen3:4b` | `qwen3:4b` (needs about 3 GB of free RAM) | `--ollama-model`, `--ollama-think` |
+
+Temporary errors (server busy, rate limit, network) are retried twice, after 5 s and 15 s, before the run moves on to the next provider.
+
+Other options:
+- `--providers` sets the fallback order as comma-separated `name` or `name:model` entries (default `gemini,gemini:gemini-3.5-flash-lite,ollama`)
 - `--max-rounds N` (default 8)
-- `--model` (default `claude-opus-5-5`)
-- `--effort low|medium|high|xhigh|max` (default `low`, to keep cost down)
 - `--save PATH`
 
-Each run prints the conversation live and writes a JSON log to `runs/`.
+Each run prints the conversation live and writes a JSON log to `runs/`. The log records which provider answered each run and any provider failures.
 
 ## Layout
 | Path | Purpose |
@@ -43,8 +87,9 @@ Each run prints the conversation live and writes a JSON log to `runs/`.
 | `scheduler/solver.py` | Z3 encoding: `verify`, `suggest`, `diagnose`, `explain` |
 | `scheduler/cli.py` | Command-line runner for the solver |
 | `scheduler/protocol.py` | Shared public board: proposals, replies, referee messages |
-| `scheduler/agents.py` | `LLMAgent` (Claude) and `HeuristicAgent` (offline), one per participant |
-| `scheduler/llm.py` | Claude API wrapper: structured JSON output, refusal fallbacks, token usage |
+| `scheduler/agents.py` | `LLMAgent` (Gemini or Ollama) and `HeuristicAgent` (offline), one per participant |
+| `scheduler/llm.py` | LLM providers (Gemini, Ollama) with JSON-schema output, plus the fallback chain |
+| `scheduler/env.py` | Loads API keys from a git-ignored `.env` file |
 | `scheduler/negotiation.py` | Negotiation loop with the solver as referee (or without, as a baseline) |
 | `scheduler/negotiate.py` | Command-line runner for negotiations |
 | `data/scenarios/` | Scenarios 01–03 (time only) and 04–06 (geography) |
@@ -96,9 +141,9 @@ Each run prints the conversation live and writes a JSON log to `runs/`.
   3. Otherwise every other agent accepts or rejects, optionally with a counter-proposal.
   4. If everyone accepts, the meeting is agreed.
 - **Getting unstuck:** after 4 rounds without agreement the referee posts 3 valid slots as hints. If the round limit is reached, it falls back to the solver's best slot. Impossible scenarios are diagnosed before any agent is called.
-- **Claude agents:**
-  - Each turn is one `claude-opus-5-5` call with structured JSON output (`output_config.format`). The schema limits the venue to the candidate ids.
-  - Server-side refusal fallbacks are on (`fallbacks: "default"`), and the system prompt is cached.
+- **LLM agents:**
+  - Each turn is one LLM call constrained to a JSON schema; the schema limits the venue to the candidate ids. Gemini uses `response_json_schema` and Ollama uses `format`.
+  - Temporary provider errors are retried, and each call has a time limit, so a busy model cannot hang a run.
   - Privacy: agents say "I'm busy then", and the referee's public messages leave out preferences and travel plans.
 - **`--no-solver`** removes the referee. The agreed slot is still checked afterwards, so the LLM-only baseline can be scored in Phase 4.
 - **Offline agents:** `HeuristicAgent` is a rule-based stand-in that uses a one-person solver for its own constraints. It makes runs reproducible and free, and powers the tests.
