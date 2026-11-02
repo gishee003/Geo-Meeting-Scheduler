@@ -70,7 +70,7 @@ python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --no-sol
 | Gemini | `GEMINI_API_KEY` (free tier at aistudio.google.com) | `gemini-3.8-flash`, then `gemini-3.5-flash-lite` | `--gemini-model` |
 | Ollama | [Ollama](https://ollama.com) installed, then `ollama pull qwen3:4b` | `qwen3:4b` (needs about 3 GB of free RAM) | `--ollama-model`, `--ollama-think` |
 
-Temporary errors (server busy, rate limit, network) are retried twice, after 5 s and 15 s, before the run moves on to the next provider.
+Gemini calls are spaced at least 7 s apart to stay under free-tier per-minute limits. Temporary errors (server busy, rate limit, network) are retried three times, after 5 s, 15 s and 60 s, before the run moves on to the next provider.
 
 Other options:
 - `--providers` sets the fallback order as comma-separated `name` or `name:model` entries (default `gemini,gemini:gemini-3.5-flash-lite,ollama`)

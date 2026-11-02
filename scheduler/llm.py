@@ -61,8 +61,15 @@ class LLM:
 class GeminiLLM(LLM):
     """Google Gemini via the google-genai SDK, with JSON-schema constrained output."""
 
-    def __init__(self, model: str = DEFAULT_GEMINI_MODEL, timeout_s: int = 60, client=None):
+    def __init__(self, model: str = DEFAULT_GEMINI_MODEL, timeout_s: int = 60, client=None,
+                 min_interval_s: float = 7, sleep: Callable[[float], None] = time.sleep,
+                 clock: Callable[[], float] = time.monotonic):
         super().__init__()
+        # Free-tier quotas are per minute, so calls are spaced out to stay under them.
+        self.min_interval_s = min_interval_s
+        self.sleep = sleep
+        self.clock = clock
+        self.last_call: float | None = None
         from google import genai  # imported lazily: optional dependency
         from google.genai import types
 
@@ -74,6 +81,11 @@ class GeminiLLM(LLM):
     def json(self, system: str, prompt: str, schema: dict) -> dict:
         from google.genai import errors, types
 
+        if self.last_call is not None:
+            wait = self.min_interval_s - (self.clock() - self.last_call)
+            if wait > 0:
+                self.sleep(wait)
+        self.last_call = self.clock()
         try:
             resp = self.client.models.generate_content(
                 model=self.model,
@@ -142,7 +154,7 @@ class FallbackLLM(LLM):
     """
 
     def __init__(self, providers: list[LLM], on_switch: Callable[[str, str, str | None], None] | None = None,
-                 retry_delays: tuple[float, ...] = (5, 15), sleep: Callable[[float], None] = time.sleep,
+                 retry_delays: tuple[float, ...] = (5, 15, 60), sleep: Callable[[float], None] = time.sleep,
                  on_retry: Callable[[str, str, float], None] | None = None):
         if not providers:
             raise ValueError("FallbackLLM needs at least one provider")

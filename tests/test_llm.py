@@ -55,6 +55,18 @@ def test_gemini_request_uses_json_schema():
     assert (llm.usage.calls, llm.usage.input_tokens, llm.usage.output_tokens) == (1, 10, 5)
 
 
+def test_gemini_calls_are_spaced_out():
+    client, _ = gemini_client({"a": "hi"})
+    waits, now = [], [100.0]
+    llm = GeminiLLM(client=client, min_interval_s=7, sleep=waits.append, clock=lambda: now[0])
+    llm.json("s", "p", SCHEMA)          # first call never waits
+    now[0] += 2
+    llm.json("s", "p", SCHEMA)          # 2 s later: waits the remaining 5 s
+    now[0] += 30
+    llm.json("s", "p", SCHEMA)          # long gap: no wait
+    assert waits == [5]
+
+
 def test_gemini_api_error_becomes_llm_error():
     err = errors.ClientError(429, {"error": {"code": 429, "message": "quota exceeded", "status": "RESOURCE_EXHAUSTED"}})
     client, _ = gemini_client(error=err)
