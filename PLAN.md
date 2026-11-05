@@ -148,5 +148,5 @@ Scheduling also has to consider **where** people are:
 - [x] Phase 2: Geographical constraints *(done 28 Oct 2026: venues, road + flight travel, same-day return, time zones, travel objective, 3 geo scenarios, 33 tests total)*
 - [x] Phase 3: LLM agents and negotiation *(done 28 Oct 2026: Gemini/Ollama agents with fallback + offline agents, refereed negotiation loop, LLM-only mode, JSON logs, 61 tests; live Gemini runs successful)*
 - [x] Phase 4: Evaluation *(done 5 Nov 2026: 4 systems x 9 scenarios, 72 runs; hybrid correct 27/27, LLM only 7/27; tables and charts in results/)*
-- [ ] Phase 5: Demo UI
+- [x] Phase 5: Demo UI *(done 5 Nov 2026: Streamlit app with scenario picker, live or replayed negotiation, verdicts, calendar, map, showcase tab; works offline in replay mode)*
 - [ ] Phase 6: Report and viva preparation

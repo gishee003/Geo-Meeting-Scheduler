@@ -11,6 +11,21 @@ copy .env.example .env          # then put your GEMINI_API_KEY in .env
 ollama pull qwen3:4b            # optional: local fallback model (needs Ollama installed)
 ```
 
+## Demo app (Phase 5)
+```powershell
+.venv\Scripts\streamlit run app.py
+```
+This opens the app in your browser. Pick a scenario and a system in the sidebar, then press **Start**:
+- **Replay a saved run** plays back a Phase 4 run from `results/logs/`. It needs no internet or API key, so it is the safe choice for a live demo.
+- **Run live now** runs a fresh negotiation with Gemini and/or a local Ollama model, streaming each message as it happens.
+
+The five tabs:
+1. **Scenario:** people, rules, plain-English notes, calendars and a map.
+2. **Negotiation:** the conversation, with the referee's verdicts in green or red.
+3. **Result:** the final slot checked by the solver, the travel plan, the calendar and the map.
+4. **Showcase:** AI alone next to AI + solver on the same scenario (default: London time zones).
+5. **Phase 4 results:** the experiment numbers and charts.
+
 ## Quick test commands (Windows PowerShell)
 Run these from the project folder.
 
@@ -99,6 +114,7 @@ Each run prints the conversation live and writes a JSON log to `runs/`. The log 
 | `scheduler/env.py` | Loads API keys from a git-ignored `.env` file |
 | `scheduler/negotiation.py` | Negotiation loop with the solver as referee (or without, as a baseline) |
 | `scheduler/negotiate.py` | Command-line runner for negotiations |
+| `app.py`, `scheduler/ui.py` | Streamlit demo app and the logic behind it |
 | `data/scenarios/` | Scenarios 01–03 (time only) and 04–06 (geography) |
 | `data/geo/world.json` | Offices, airports, travel parameters and an illustrative flight timetable |
 | `tests/` | Unit tests, including a brute-force cross-check of the solver |
