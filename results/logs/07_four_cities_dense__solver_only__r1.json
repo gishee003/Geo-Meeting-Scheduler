@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "07_four_cities_dense",
+    "tier": "hard",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "solved",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 7,
+    "best_score": 7,
+    "max_score": 7,
+    "travel": 710,
+    "best_travel": 710,
+    "runtime_s": 0.151,
+    "model": null,
+    "start": 3720,
+    "venue": "blr_kor_office",
+    "error": null
+  },
+  "transcript": []
+}

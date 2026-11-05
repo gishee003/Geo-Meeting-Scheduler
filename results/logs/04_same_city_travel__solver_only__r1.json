@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "04_same_city_travel",
+    "tier": "easy",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "solved",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 2,
+    "best_score": 2,
+    "max_score": 2,
+    "travel": 100,
+    "best_travel": 100,
+    "runtime_s": 0.053,
+    "model": null,
+    "start": 660,
+    "venue": "blr_kor_office",
+    "error": null
+  },
+  "transcript": []
+}

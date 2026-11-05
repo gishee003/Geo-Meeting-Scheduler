@@ -1,0 +1,107 @@
+{
+  "row": {
+    "scenario": "04_same_city_travel",
+    "tier": "easy",
+    "system": "hybrid",
+    "repeat": 3,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 7,
+    "input_tokens": 7548,
+    "output_tokens": 493,
+    "score": 0,
+    "best_score": 2,
+    "max_score": 2,
+    "travel": 50,
+    "best_travel": 100,
+    "runtime_s": 71.842,
+    "model": "gemini-3.5-flash-lite",
+    "start": 840,
+    "venue": "blr_ec_office",
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Design huddle' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How about we meet at the Koramangala office on Monday, 2nd November at 11:30?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 11:30-12:30 (Asia/Kolkata) at Bengaluru office (Koramangala) breaks 1 hard constraint(s):\n  - Rahul would have to leave Bengaluru office (Koramangala) by Mon 02 Nov 12:10 to make 'Vendor visit' at Bengaluru office (Electronic City), but the meeting ends at Mon 02 Nov 12:30"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "Hi everyone! Since 11:30 doesn't work, how about we meet here at the Electronic City office on Monday, 2nd November at 10:00 instead?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 10:00-11:00 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 1 hard constraint(s):\n  - Asha is busy Mon 02 Nov 09:00-11:00 (Client workshop) at Bengaluru office (Koramangala)"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "proposal",
+      "text": "Hi everyone! Since Asha is busy earlier in the morning, how about we meet at the Electronic City office at 11:00 instead?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 11:00-12:00 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 1 hard constraint(s):\n  - Asha cannot reach Bengaluru office (Electronic City) by Mon 02 Nov 11:00: after 'Client workshop' at Bengaluru office (Koramangala) (free from Mon 02 Nov 11:00) the earliest arrival is Mon 02 Nov 11:50 (leave Mon 02 Nov 11:00, 50 min by road to Bengaluru office (Electronic City), arrive Mon 02 Nov 11:50)"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! Since I finish my workshop at 11:00, how about we meet at the Koramangala office at 11:15 instead?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 11:15-12:15 (Asia/Kolkata) at Bengaluru office (Koramangala) breaks 1 hard constraint(s):\n  - Rahul would have to leave Bengaluru office (Koramangala) by Mon 02 Nov 12:10 to make 'Vendor visit' at Bengaluru office (Electronic City), but the meeting ends at Mon 02 Nov 12:15"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-02T11:00 (Mon) at Bengaluru office (Koramangala) [blr_kor_office]; 2026-11-02T12:00 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]; 2026-11-02T14:00 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "Hi everyone! How about we meet here at the Electronic City office at 14:00 since that works well for my schedule?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Mon 02 Nov 14:00-15:00 (Asia/Kolkata) at Bengaluru office (Electronic City) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works for me! See you all at 14:00 at the Electronic City office."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "That works for me too! See you all at 14:00 at the Electronic City office."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-02T14:00 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]."
+    }
+  ]
+}

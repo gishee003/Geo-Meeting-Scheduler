@@ -1,0 +1,126 @@
+{
+  "row": {
+    "scenario": "03_impossible",
+    "tier": "impossible",
+    "system": "llm_only",
+    "repeat": 1,
+    "status": "no_agreement",
+    "correct": false,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 8,
+    "proposals": 8,
+    "invalid_caught": 0,
+    "llm_calls": 17,
+    "input_tokens": 11835,
+    "output_tokens": 1017,
+    "score": null,
+    "best_score": null,
+    "max_score": 0,
+    "travel": null,
+    "best_travel": null,
+    "runtime_s": 135.909,
+    "model": "gemini-3.5-flash-lite",
+    "start": null,
+    "venue": null,
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Kick-off' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Monday, November 2nd at 10:00 work for the kick-off?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Monday, November 2nd at 10:00 works well for Rahul. See you all then!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then. How about Monday, November 2nd at 14:00 instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Monday at 14:00 works great for me too. Let's lock it in!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "I'm busy then. Could we try Tuesday, November 3rd at 10:00 instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "I have a conflict at that time on Tuesday. How about Tuesday, November 3rd at 14:00 instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then. Tuesday, November 3rd at 14:00 works well for me if that suits everyone else!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "I'm busy then. How about Wednesday, November 4th at 10:00 instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then, but Wednesday, November 4th at 15:00 works for me if that suits everyone."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Wednesday, November 4th at 10:00 works for me too! Let's lock it in."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then, but Wednesday, November 4th at 15:00 works well for me!"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Wednesday, November 4th at 15:00 works for me too! Let's lock it in."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "I'm busy then. How about Thursday, November 5th at 10:00 instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Thursday at 10:00 works great for me too! Let's lock it in."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then, but Thursday, November 5th at 15:00 works well for me if that suits everyone."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Thursday at 15:00 works for me too! Let's lock it in."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "I'm busy then. Could we try Friday, November 6th at 10:00 instead?"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "No agreement after 8 rounds."
+    }
+  ]
+}

@@ -48,7 +48,7 @@ class Outcome:
 class Negotiation:
     def __init__(self, scenario: Scenario, agents: list[Agent], use_solver: bool = True,
                  max_rounds: int = 8, suggest_after: int = 4,
-                 on_post: Callable[[Entry], None] | None = None):
+                 on_post: Callable[[Entry], None] | None = None, intro: list[str] | None = None):
         self.sc = scenario
         self.agents = agents
         self.by_id = {a.person.id: a for a in agents}
@@ -58,6 +58,7 @@ class Negotiation:
         self.solver = MeetingSolver(scenario)
         self.board = Board(scenario)
         self.on_post = on_post
+        self.intro = intro or []
 
     def _post(self, speaker: str, kind: str, text: str) -> None:
         entry = self.board.post(speaker, kind, text)
@@ -87,6 +88,9 @@ class Negotiation:
         names = ", ".join(a.name for a in self.agents)
         self._post("Mediator", "system",
                    f"Let's schedule '{sc.meeting.title}' ({sc.meeting.duration} min) for {names}.")
+
+        for line in self.intro:
+            self._post("Mediator", "system", line)
 
         if self.use_solver:
             diag = self.solver.diagnose()

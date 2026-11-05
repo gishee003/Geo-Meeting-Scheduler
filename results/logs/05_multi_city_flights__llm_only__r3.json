@@ -1,0 +1,127 @@
+{
+  "row": {
+    "scenario": "05_multi_city_flights",
+    "tier": "medium",
+    "system": "llm_only",
+    "repeat": 3,
+    "status": "no_agreement",
+    "correct": false,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 8,
+    "proposals": 8,
+    "invalid_caught": 0,
+    "llm_calls": 17,
+    "input_tokens": 16998,
+    "output_tokens": 1322,
+    "score": null,
+    "best_score": 3,
+    "max_score": 3,
+    "travel": null,
+    "best_travel": 570,
+    "runtime_s": 146.508,
+    "model": "gemini-3.5-flash-lite",
+    "start": null,
+    "venue": null,
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Regional review' (90 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does meeting at the Bengaluru office on Monday, 2nd November from 10:00 to 11:30 work for you?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, that slot doesn't work for Rahul due to travel constraints. How about meeting online instead, say on Monday 2nd November at 10:00?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone, travel to Bengaluru exceeds Priya's maximum travel limit. Rahul suggested online on Monday, which works well for us!"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! I must attend in person, so online unfortunately doesn't work for me. Would meeting at the Bengaluru office on Tuesday, 3rd November from 10:00 to 11:30 work for you both?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, I cannot travel to Bengaluru as it exceeds Priya's travel limit, but online works great if you can join!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, Rahul cannot travel to Bengaluru and has a client lunch at the Mumbai office on Tuesday. Would meeting at the Mumbai office instead work for everyone?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! Bengaluru is too far for me to travel within my limits, but Mumbai works nicely if we can adjust the timing."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! Unfortunately, traveling to Mumbai on such short notice doesn't work with my schedule. How about we meet at the Bengaluru office on Tuesday, 3rd November from 10:00 to 11:30?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! Unfortunately, Bengaluru is too far for me to travel within my limits."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, Rahul cannot travel to Bengaluru as he prefers not to fly, and he also has a client lunch at the Mumbai office on Tuesday."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! Bengaluru is still too far for me to travel within my limits. Would the Mumbai office work for everyone instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! Traveling to Mumbai doesn't fit my schedule, and I must attend in person. How about we meet at the Bengaluru office on Wednesday, 4th November from 10:00 to 11:30?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That works well for Rahul. See you all at the Mumbai office on Tuesday afternoon!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, Rahul cannot travel to Bengaluru as he prefers not to fly. How about we meet online on Wednesday, 4th November from 10:00 to 11:30 instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! Unfortunately, Bengaluru is too far for me to travel within my limits. How about we meet at the Delhi office instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! Since I must attend in person, online unfortunately doesn't work for me."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! Unfortunately, online meetings don't work for Asha, and I cannot travel to Bengaluru. How about we meet at the Delhi office instead?"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "No agreement after 8 rounds."
+    }
+  ]
+}

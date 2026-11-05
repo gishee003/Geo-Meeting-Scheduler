@@ -1,0 +1,79 @@
+{
+  "name": "Five people, two countries",
+  "description": "Five people in Bengaluru, Mumbai, Delhi NCR and London need 90 minutes. Only an online meeting can include London, and packed calendars leave a tiny part of the short India-London overlap.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 3 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Global roadmap",
+    "duration_minutes": 90,
+    "participants": ["asha", "rahul", "priya", "vikram", "emma"],
+    "venues": ["blr_ec_office", "lon_office", "online"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Hiring panel", "start": "2026-11-02T15:00", "end": "2026-11-02T16:30" },
+        { "title": "Budget review", "start": "2026-11-03T16:30", "end": "2026-11-03T17:30" }
+      ],
+      "preferences": [
+        { "type": "prefer_in_person", "weight": 1 }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "bom_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Sprint review", "start": "2026-11-03T14:30", "end": "2026-11-03T15:30" },
+        { "title": "Release", "start": "2026-11-04T14:00", "end": "2026-11-04T15:30" }
+      ]
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "base": "del_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Customer demo", "start": "2026-11-02T14:30", "end": "2026-11-02T15:30" },
+        { "title": "Design sprint", "start": "2026-11-04T17:00", "end": "2026-11-04T18:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_days", "days": ["Wed"], "weight": 1 }
+      ]
+    },
+    {
+      "id": "vikram",
+      "name": "Vikram",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_kor_office",
+      "working_hours": { "start": "10:00", "end": "19:00" },
+      "calendar": [
+        { "title": "Ops review", "start": "2026-11-03T15:30", "end": "2026-11-03T16:30" }
+      ]
+    },
+    {
+      "id": "emma",
+      "name": "Emma",
+      "timezone": "Europe/London",
+      "base": "lon_office",
+      "working_hours": { "start": "09:00", "end": "17:00" },
+      "calendar": [
+        { "title": "Team standup", "start": "2026-11-02T09:00", "end": "2026-11-02T10:00" },
+        { "title": "Team standup", "start": "2026-11-04T09:00", "end": "2026-11-04T10:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_time_window", "start": "10:00", "end": "13:00", "weight": 2 }
+      ]
+    }
+  ]
+}

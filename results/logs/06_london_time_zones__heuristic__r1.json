@@ -1,0 +1,106 @@
+{
+  "row": {
+    "scenario": "06_london_time_zones",
+    "tier": "medium",
+    "system": "heuristic",
+    "repeat": 1,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 2,
+    "best_score": 2,
+    "max_score": 3,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 0.513,
+    "model": null,
+    "start": 2370,
+    "venue": "online",
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Cross-site planning' (60 min) for Asha, Rahul, Emma."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T09:00 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 09:00-10:00 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 2 hard constraint(s):\n  - Rahul works Mon, Tue, Wed, Thu, Fri 10:00-19:00 (Asia/Kolkata)\n  - Emma works Mon, Tue, Wed, Thu, Fri 09:00-17:00 (Europe/London)"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T10:00 (Mon) at Online (video call) [online]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 10:00-11:00 (Asia/Kolkata) at Online (video call) breaks 1 hard constraint(s):\n  - Emma works Mon, Tue, Wed, Thu, Fri 09:00-17:00 (Europe/London)"
+    },
+    {
+      "speaker": "Emma",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T15:30 (Mon) at London office (City) [lon_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 15:30-16:30 (Asia/Kolkata) at London office (City) breaks 3 hard constraint(s):\n  - Asha is busy Mon 02 Nov 14:00-18:00 (Hiring panel)\n  - Rahul cannot reach London office (City) by Mon 02 Nov 15:30: after start of day at Bengaluru office (Electronic City) (free from Mon 02 Nov 06:00) the earliest arrival is Tue 03 Nov 01:40 (leave Mon 02 Nov 09:20, 100 min by road to Bengaluru Airport (BLR), flight MR401 Mon 02 Nov 13:30 -> Tue 03 Nov 00:00, 80 min by road to London office (City), arrive Tue 03 Nov 01:40)\n  - Rahul would have to leave London office (City) by Sun 01 Nov 22:40 to make being back at Bengaluru office (Electronic City) by 23:00, but the meeting ends at Mon 02 Nov 16:30"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T09:15 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 09:15-10:15 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 2 hard constraint(s):\n  - Rahul works Mon, Tue, Wed, Thu, Fri 10:00-19:00 (Asia/Kolkata)\n  - Emma works Mon, Tue, Wed, Thu, Fri 09:00-17:00 (Europe/London)"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-03T15:30 (Tue) at Online (video call) [online]; 2026-11-03T16:30 (Tue) at Online (video call) [online]; 2026-11-04T15:30 (Wed) at Online (video call) [online]"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How about 2026-11-03T15:30 (Tue) at Online (video call) [online]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Tue 03 Nov 15:30-16:30 (Asia/Kolkata) at Online (video call) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works for Asha."
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "That works for Emma."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-03T15:30 (Tue) at Online (video call) [online]."
+    }
+  ]
+}

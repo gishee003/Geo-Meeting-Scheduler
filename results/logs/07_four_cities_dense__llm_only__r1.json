@@ -1,0 +1,166 @@
+{
+  "row": {
+    "scenario": "07_four_cities_dense",
+    "tier": "hard",
+    "system": "llm_only",
+    "repeat": 1,
+    "status": "no_agreement",
+    "correct": false,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 8,
+    "proposals": 8,
+    "invalid_caught": 0,
+    "llm_calls": 25,
+    "input_tokens": 32116,
+    "output_tokens": 2082,
+    "score": null,
+    "best_score": 7,
+    "max_score": 7,
+    "travel": null,
+    "best_travel": 710,
+    "runtime_s": 174.721,
+    "model": "gemini-3.5-flash-lite",
+    "start": null,
+    "venue": null,
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Launch readiness' (60 min) for Asha, Vikram, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Monday, November 2nd from 12:30 to 13:30 work for everyone at the Bengaluru Electronic City office?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi Asha, that time and venue work well for Vikram. See you all on Monday!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha! I am unable to make that time and venue work for Rahul. Would we be able to meet at our Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! I'm busy then, and travel to Bengaluru is a bit tight for Monday. How about we meet at our Delhi Gurugram office on Wednesday instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi Priya, I prefer not to fly so Delhi doesn't work for me. How about we meet at our Bengaluru Electronic City office on Tuesday, November 3rd from 14:00 to 15:00 instead?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi everyone! Vikram cannot fly, so Delhi won't work. How about we meet at the Bengaluru Koramangala office on Monday, November 2nd from 14:00 instead?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I cannot make that venue and time work for Rahul. How about we meet at the Mumbai office on Tuesday, November 3rd from 15:00 to 16:00 instead?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi Rahul, I have a conflict at that time on Tuesday, but how about Monday, November 2nd from 15:00 to 16:00 at the Koramangala office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Vikram, that time and venue don't work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! I'm busy then, but how about we meet at our Delhi Gurugram office on Wednesday, November 4th from 10:00 to 11:00?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! I have a client workshop at the Koramangala office ending at 16:00 on Monday, so I can't make 15:00 there. How about Tuesday, November 3rd from 11:30 to 12:30 at our Electronic City office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I can't make that venue work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then and travel to Bengaluru doesn't work for me. How about Wednesday, November 4th from 10:00 to 11:00 at our Delhi Gurugram office?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi everyone! That time and venue work well for Vikram. Looking forward to it!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I can't make that venue work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I have a travel constraint for that venue on Tuesday, but Wednesday at our Delhi office works well for me!"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone! I prefer not to fly, so Delhi doesn't work for me. How about we meet at our Electronic City office on Tuesday, November 3rd from 11:30 to 12:30?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi everyone! Vikram cannot fly, so Delhi doesn't work. How about meeting at our Koramangala office on Wednesday, November 4th from 11:30 to 12:30 instead?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I can't make that venue work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi everyone, I have a conflict on Wednesday morning at Koramangala. How about Tuesday, November 3rd from 11:30 to 12:30 at our Electronic City office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I can't make that venue work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! I'm sorry, but travel to Bengaluru doesn't work for me. How about we meet at our Mumbai office instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That time and venue work well for me. Let's meet at the Electronic City office on Tuesday!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone! I can't make that venue work for Rahul due to travel constraints. How about we meet here at the Mumbai office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! I can't travel to Bengaluru then. How about we meet at our Mumbai office on Tuesday, November 3rd from 15:00 to 16:00 instead?"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "No agreement after 8 rounds."
+    }
+  ]
+}

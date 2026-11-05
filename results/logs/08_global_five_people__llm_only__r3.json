@@ -1,0 +1,127 @@
+{
+  "row": {
+    "scenario": "08_global_five_people",
+    "tier": "hard",
+    "system": "llm_only",
+    "repeat": 3,
+    "status": "agreed",
+    "correct": false,
+    "unsafe": true,
+    "valid": false,
+    "rescued": false,
+    "rounds": 4,
+    "proposals": 4,
+    "invalid_caught": 0,
+    "llm_calls": 17,
+    "input_tokens": 16001,
+    "output_tokens": 1119,
+    "score": 0,
+    "best_score": 3,
+    "max_score": 4,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 158.813,
+    "model": "gemini-3.5-flash-lite",
+    "start": 2040,
+    "venue": "online",
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Global roadmap' (90 min) for Asha, Rahul, Priya, Vikram, Emma."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How about we meet at the Bengaluru office on Monday, November 2nd from 10:00 to 11:30?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha! I'm busy then due to travel constraints. Would online work better for everyone?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "That time doesn't work for me, and I'd prefer an online meeting to avoid travel."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hello everyone! I'm busy at that time, but I'm happy to do it online later if that works for the team."
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Hi everyone! An online meeting would be great, but Monday morning doesn't work for me. How about we meet online on Tuesday, November 3rd from 10:00 to 11:30 London time?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works well for me! I'm happy to join online at that time."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "I'm busy then, but how about we meet online on Wednesday, November 4th from 14:00 to 15:30?"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi Rahul, that time doesn't work for me. How about we meet online on Wednesday, November 4th instead?"
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Hi Rahul, I have a conflict then. How about we meet online on Tuesday, November 3rd from 10:00 to 11:30 London time instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works for me! See you all online on Wednesday."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Priya! I have a release scheduled then, so I'm busy at that time."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Wednesday afternoon online works well for me. Let's go with that!"
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Hi everyone! I have a standup at that time on Wednesday. How about we meet online on Tuesday, November 3rd from 10:00 to 11:30 London time instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works for me! See you all online then."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That time works well for me online. See you all then!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "That works for me! See you all online on Tuesday."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "That works for me! See you all online on Tuesday."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-03T10:00 (Tue) at Online (video call) [online]."
+    }
+  ]
+}

@@ -29,6 +29,10 @@ Run these from the project folder.
 
 # 5. All automatic tests
 .venv\Scripts\python -m pytest -q
+
+# 6. Phase 4 experiments (resumable), then tables and charts
+.venv\Scripts\python -u -m scheduler.evaluate
+.venv\Scripts\python -m scheduler.report
 ```
 
 Swap the scenario file in any command to try another case:
@@ -41,6 +45,9 @@ Swap the scenario file in any command to try another case:
 | `04_same_city_travel.json` | Two offices 50 min apart |
 | `05_multi_city_flights.json` | Three cities, flights there and back |
 | `06_london_time_zones.json` | London plus India; should end up online |
+| `07_four_cities_dense.json` | Hard: four people, three cities, packed calendars |
+| `08_global_five_people.json` | Hard: five people across India and London |
+| `09_plain_language_notes.json` | Requests in everyday English that the AI must translate |
 
 Compare commands 1 and 2: without the referee, check whether the agents agree on a slot that is actually impossible. The final summary marks it **INVALID**. Every run is saved as a JSON log in `runs\`.
 
@@ -157,6 +164,12 @@ Each run prints the conversation live and writes a JSON log to `runs/`. The log 
   | **Fallback** | After the last round: the solver's best valid slot is used | Status `no_agreement` (no fallback) |
 - **`--no-solver`** removes the referee. The agreed slot is still checked afterwards, so the LLM-only baseline can be scored in Phase 4.
 - **Offline agents:** `HeuristicAgent` is a rule-based stand-in that uses a one-person solver for its own constraints. It makes runs reproducible and free, and powers the tests.
+
+### Evaluation (Phase 4)
+- `scheduler/evaluate.py` runs four systems on every scenario: **LLM only**, **solver only**, **hybrid** and **rule-based agents**. The two LLM systems are repeated 3 times (`--repeats`). Each run is saved to `results/logs/` and the script resumes after an interruption. One model is used throughout; if it fails, the run stops rather than mixing models.
+- Every result is scored against the solver's ground truth, including what people's plain-language notes really mean (`note_truth` in the scenario, never shown to agents). **Correct** means a valid meeting, or a proof of impossibility on the impossible scenario.
+- `scheduler/report.py` writes `results/summary.md` (tables) and `results/charts/` (outcomes, preference score, LLM calls).
+- **Plain-language notes:** in hybrid, `scheduler/translate.py` has the LLM turn each person's `notes` into formal rules, which the solver then enforces. Each translated rule is posted in the conversation, because the solver guarantees the rules, not the translation.
 
 ## Scenario format
 ```jsonc

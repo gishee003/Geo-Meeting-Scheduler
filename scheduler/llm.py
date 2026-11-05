@@ -79,6 +79,7 @@ class GeminiLLM(LLM):
         self.client = client or genai.Client(http_options=types.HttpOptions(timeout=timeout_s * 1000))
 
     def json(self, system: str, prompt: str, schema: dict) -> dict:
+        import httpx
         from google.genai import errors, types
 
         if self.last_call is not None:
@@ -99,7 +100,7 @@ class GeminiLLM(LLM):
         except errors.APIError as e:
             busy = e.code == 429 or (e.code or 0) >= 500
             raise LLMError(f"Gemini API error {e.code}: {e.message}", transient=busy) from e
-        except OSError as e:
+        except (OSError, httpx.HTTPError) as e:
             raise LLMError("Could not reach the Gemini API (network error)", transient=True) from e
 
         meta = resp.usage_metadata

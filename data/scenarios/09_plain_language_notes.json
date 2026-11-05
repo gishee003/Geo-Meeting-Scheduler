@@ -1,0 +1,59 @@
+{
+  "name": "Plain-language requests",
+  "description": "Three colleagues add requests in everyday English that no formal rule captures. A solver alone cannot read them, so it picks a slot that looks perfect but ignores what people really need.",
+  "timezone": "Asia/Kolkata",
+  "horizon": { "start": "2026-11-02", "days": 5 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Team planning",
+    "duration_minutes": 60,
+    "participants": ["asha", "rahul", "priya"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Client call", "start": "2026-11-03T10:00", "end": "2026-11-03T11:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_time_window", "start": "15:00", "end": "18:00", "weight": 3 }
+      ],
+      "notes": ["I'm away at a family wedding all day Wednesday, so that day is out."],
+      "note_truth": {
+        "hard_constraints": [{ "type": "no_meetings_on_days", "days": ["Wed"] }]
+      }
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Sprint planning", "start": "2026-11-04T11:00", "end": "2026-11-04T12:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_days", "days": ["Tue", "Wed"], "weight": 2 }
+      ],
+      "notes": ["Mondays are hectic for me, I'd really rather not meet then."],
+      "note_truth": {
+        "preferences": [{ "type": "avoid_days", "days": ["Mon"], "weight": 2 }]
+      }
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Code review", "start": "2026-11-05T11:00", "end": "2026-11-05T12:00" }
+      ],
+      "notes": ["I leave at 15:00 on Tuesdays and Thursdays to pick up my kids from school, so I can't do anything after that on those days."],
+      "note_truth": {
+        "hard_constraints": [{ "type": "blocked_window", "start": "15:00", "end": "18:00", "days": ["Tue", "Thu"] }]
+      }
+    }
+  ]
+}

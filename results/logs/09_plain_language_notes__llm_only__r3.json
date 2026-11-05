@@ -1,0 +1,107 @@
+{
+  "row": {
+    "scenario": "09_plain_language_notes",
+    "tier": "plain-language",
+    "system": "llm_only",
+    "repeat": 3,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 6,
+    "proposals": 6,
+    "invalid_caught": 0,
+    "llm_calls": 13,
+    "input_tokens": 9608,
+    "output_tokens": 901,
+    "score": 2,
+    "best_score": 5,
+    "max_score": 7,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 131.017,
+    "model": "gemini-3.5-flash-lite",
+    "start": 5100,
+    "venue": null,
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Team planning' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Monday, November 2nd from 15:00 to 16:00 work for this meeting?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, Mondays are a bit too hectic for me. How does Tuesday or Wednesday work for everyone instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Rahul is right that Mondays are tough, but how about Wednesday, November 4th from 10:00 to 11:00?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Wednesday doesn't work for me as I am away all day. How about Tuesday, November 3rd from 15:00 to 16:00 instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, I'm busy then as I have to leave early on Tuesdays. How about Wednesday, November 4th from 14:00 to 15:00 instead?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Priya, that slot doesn't work for me as I have a conflict then. How about Wednesday, November 4th from 14:00 to 15:00 instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, I can't make that time on Tuesday as I need to leave early. How about Wednesday morning instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi everyone, I'm away all day on Wednesday for a family wedding. How does Thursday, November 5th from 15:00 to 16:00 work?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Rahul, I have a conflict at that time on Wednesday. How about Thursday, November 5th from 13:00 to 14:00 instead?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Thursday at 15:00 works well for me. Let's lock it in!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone! I have to leave by 15:00 on Thursdays to pick up my kids, so that time doesn't work for me. How about Thursday, November 5th from 13:00 to 14:00 instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Thursday from 13:00 to 14:00 works for me as well. Let's go ahead and lock it in!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Thursday from 13:00 to 14:00 works well for me too. Let's lock it in!"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-05T13:00 (Thu)."
+    }
+  ]
+}

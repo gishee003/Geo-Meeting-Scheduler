@@ -1,0 +1,106 @@
+{
+  "row": {
+    "scenario": "01_simple_team_sync",
+    "tier": "easy",
+    "system": "hybrid",
+    "repeat": 1,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 7,
+    "input_tokens": 5790,
+    "output_tokens": 372,
+    "score": 7,
+    "best_score": 7,
+    "max_score": 7,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 52.379,
+    "model": "gemini-3.5-flash-lite",
+    "start": 3540,
+    "venue": null,
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Project sync' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Monday, November 2nd at 10:00 AM work for our project sync?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 10:00-11:00 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Asha has no meetings on Mon"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "Hi Asha and Priya! How does Monday, November 2nd at 11:00 AM work for everyone?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 11:00-12:00 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Asha has no meetings on Mon"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Tuesday, November 3rd at 10:00 AM work for our sync?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 10:00-11:00 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Asha is busy Tue 03 Nov 09:00-10:30 (Design review)"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi Priya! Since Tuesday morning is busy for me, how about we try Tuesday, November 3rd at 11:00 AM instead?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 11:00-12:00 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Rahul is busy Tue 03 Nov 11:00-12:30 (Sprint planning)"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-04T11:00 (Wed); 2026-11-06T10:00 (Fri); 2026-11-06T11:00 (Fri)"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How does Wednesday, November 4th at 11:00 AM work for everyone?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Wed 04 Nov 11:00-12:00 (Asia/Kolkata) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Wednesday at 11:00 AM works wonderfully for me!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Wednesday at 11:00 AM works well for me too. Let's lock it in!"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-04T11:00 (Wed)."
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "name": "Four people, three cities, dense calendars",
+  "description": "A 60-minute in-person meeting across Bengaluru, Mumbai and Delhi NCR. Calendars are packed with events at different locations, and same-day flights leave very few slots.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 3 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Launch readiness",
+    "duration_minutes": 60,
+    "participants": ["asha", "vikram", "rahul", "priya"],
+    "venues": ["blr_ec_office", "blr_kor_office", "bom_office", "del_office"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Design review", "start": "2026-11-02T10:00", "end": "2026-11-02T12:00", "location": "blr_ec_office" },
+        { "title": "Client workshop", "start": "2026-11-02T14:00", "end": "2026-11-02T16:00", "location": "blr_kor_office" },
+        { "title": "Hiring panel", "start": "2026-11-03T09:00", "end": "2026-11-03T11:00", "location": "blr_ec_office" },
+        { "title": "Budget review", "start": "2026-11-04T16:00", "end": "2026-11-04T17:30", "location": "blr_ec_office" }
+      ],
+      "hard_constraints": [
+        { "type": "in_person_only" }
+      ],
+      "preferences": [
+        { "type": "avoid_flying", "weight": 3 }
+      ]
+    },
+    {
+      "id": "vikram",
+      "name": "Vikram",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_kor_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Vendor visit", "start": "2026-11-03T14:00", "end": "2026-11-03T15:30", "location": "blr_kor_office" },
+        { "title": "Ops review", "start": "2026-11-04T09:00", "end": "2026-11-04T11:00", "location": "blr_kor_office" }
+      ],
+      "hard_constraints": [
+        { "type": "no_flying" }
+      ]
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "bom_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Sprint planning", "start": "2026-11-02T16:30", "end": "2026-11-02T17:30", "location": "bom_office" },
+        { "title": "Client lunch", "start": "2026-11-03T12:30", "end": "2026-11-03T14:00", "location": "bom_office" }
+      ],
+      "preferences": [
+        { "type": "prefer_time_window", "start": "14:00", "end": "18:00", "weight": 2 }
+      ]
+    },
+    {
+      "id": "priya",
+      "name": "Priya",
+      "timezone": "Asia/Kolkata",
+      "base": "del_office",
+      "return_by": "23:45",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Board prep", "start": "2026-11-02T09:00", "end": "2026-11-02T10:00", "location": "del_office" }
+      ],
+      "hard_constraints": [
+        { "type": "max_travel_minutes", "minutes": 420 }
+      ],
+      "preferences": [
+        { "type": "prefer_days", "days": ["Wed"], "weight": 2 }
+      ]
+    }
+  ]
+}

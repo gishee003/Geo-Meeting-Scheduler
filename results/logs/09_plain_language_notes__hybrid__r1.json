@@ -1,0 +1,77 @@
+{
+  "row": {
+    "scenario": "09_plain_language_notes",
+    "tier": "plain-language",
+    "system": "hybrid",
+    "repeat": 1,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 1,
+    "proposals": 1,
+    "invalid_caught": 0,
+    "llm_calls": 6,
+    "input_tokens": 3095,
+    "output_tokens": 390,
+    "score": 4,
+    "best_score": 5,
+    "max_score": 7,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 41.558,
+    "model": "gemini-3.5-flash-lite",
+    "start": 2100,
+    "venue": null,
+    "error": null,
+    "notes_translated": 3
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Team planning' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Must-follow rule from Asha's note \"I'm away at a family wedding all day Wednesday, so that day is out.\": Asha has no meetings on Wed."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Preference from Rahul's note \"Mondays are hectic for me, I'd really rather not meet then.\": Rahul prefers no meetings on Mon."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Must-follow rule from Priya's note \"I leave at 15:00 on Tuesdays and Thursdays to pick up my kids from school, so I can't do anything after that on those days.\": Priya cannot meet between 15:00 and 23:59 on Tue, Thu."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone, how does Tuesday the 3rd at 11:00 work for our team planning session?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Tue 03 Nov 11:00-12:00 (Asia/Kolkata) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Tuesday at 11:00 works well for me. Let's lock it in!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Tuesday at 11:00 works great for me as well!"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-03T11:00 (Tue)."
+    }
+  ]
+}

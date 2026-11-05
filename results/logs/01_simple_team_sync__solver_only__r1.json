@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "01_simple_team_sync",
+    "tier": "easy",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "solved",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 7,
+    "best_score": 7,
+    "max_score": 7,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 0.026,
+    "model": null,
+    "start": 3540,
+    "venue": null,
+    "error": null
+  },
+  "transcript": []
+}

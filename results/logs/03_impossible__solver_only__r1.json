@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "03_impossible",
+    "tier": "impossible",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "impossible",
+    "correct": true,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": null,
+    "best_score": null,
+    "max_score": 0,
+    "travel": null,
+    "best_travel": null,
+    "runtime_s": 0.013,
+    "model": null,
+    "start": null,
+    "venue": null,
+    "error": null
+  },
+  "transcript": []
+}

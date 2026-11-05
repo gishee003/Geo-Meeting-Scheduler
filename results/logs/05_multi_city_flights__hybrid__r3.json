@@ -1,0 +1,107 @@
+{
+  "row": {
+    "scenario": "05_multi_city_flights",
+    "tier": "medium",
+    "system": "hybrid",
+    "repeat": 3,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 7,
+    "input_tokens": 11570,
+    "output_tokens": 502,
+    "score": 3,
+    "best_score": 3,
+    "max_score": 3,
+    "travel": 570,
+    "best_travel": 570,
+    "runtime_s": 43.152,
+    "model": "gemini-3.5-flash-lite",
+    "start": 2280,
+    "venue": "bom_office",
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Regional review' (90 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! Since Asha needs to attend in person at our home office, how does meeting at the Bengaluru office on Tuesday, November 3rd from 10:00 to 11:30 work for you?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 10:00-11:30 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 4 hard constraint(s):\n  - Rahul cannot reach Bengaluru office (Electronic City) by Tue 03 Nov 10:00: after start of day at Mumbai office (BKC) (free from Tue 03 Nov 06:00) the earliest arrival is Tue 03 Nov 12:45 (leave Tue 03 Nov 07:40, 20 min by road to Mumbai Airport (BOM), flight MR102 Tue 03 Nov 09:00 -> 10:45, 100 min by road to Bengaluru office (Electronic City), arrive Tue 03 Nov 12:45)\n  - Rahul would have to leave Bengaluru office (Electronic City) by Tue 03 Nov 05:50 to make 'Client lunch' at Mumbai office (BKC), but the meeting ends at Tue 03 Nov 11:30\n  - Priya cannot reach Bengaluru office (Electronic City) by Tue 03 Nov 10:00: after start of day at Delhi NCR office (Gurugram) (free from Tue 03 Nov 06:00) the earliest arrival is Tue 03 Nov 13:50 (leave Tue 03 Nov 07:25, 35 min by road to Delhi Airport (DEL), flight MR202 Tue 03 Nov 09:00 -> 11:50, 100 min by road to Bengaluru office (Electronic City), arrive Tue 03 Nov 13:50)\n  - Priya will travel at most 360 min each way"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "Hi everyone, how about we meet online or at our Mumbai office on Monday, November 2nd from 10:00 to 11:30?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 10:00-11:30 (Asia/Kolkata) at Mumbai office (BKC) breaks 3 hard constraint(s):\n  - Asha cannot reach Mumbai office (BKC) by Mon 02 Nov 10:00: after start of day at Bengaluru office (Electronic City) (free from Mon 02 Nov 06:00) the earliest arrival is Mon 02 Nov 13:25 (leave Mon 02 Nov 08:20, 100 min by road to Bengaluru Airport (BLR), flight MR101 Mon 02 Nov 11:00 -> 12:45, 20 min by road to Mumbai office (BKC), arrive Mon 02 Nov 13:25)\n  - Asha would have to leave Mumbai office (BKC) by Mon 02 Nov 07:40 to make 'Board prep' at Bengaluru office (Electronic City), but the meeting ends at Mon 02 Nov 11:30\n  - Priya cannot reach Mumbai office (BKC) by Mon 02 Nov 10:00: after start of day at Delhi NCR office (Gurugram) (free from Mon 02 Nov 06:00) the earliest arrival is Mon 02 Nov 12:20 (leave Mon 02 Nov 07:55, 35 min by road to Delhi Airport (DEL), flight MR302 Mon 02 Nov 09:30 -> 11:40, 20 min by road to Mumbai office (BKC), arrive Mon 02 Nov 12:20)"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "proposal",
+      "text": "Hi everyone! Since travel can be tight, how about we meet online on Tuesday, November 3rd from 10:00 to 11:30 instead?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 10:00-11:30 (Asia/Kolkata) at Online (video call) breaks 1 hard constraint(s):\n  - Asha must attend in person"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Since Asha must attend in person at our Bengaluru office and needs some time to arrive, how about we meet at the Bengaluru office on Tuesday, November 3rd from 14:00 to 15:30?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 14:00-15:30 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 3 hard constraint(s):\n  - Rahul cannot reach Bengaluru office (Electronic City) by Tue 03 Nov 14:00: after 'Client lunch' at Mumbai office (BKC) (free from Tue 03 Nov 14:00) the earliest arrival is Tue 03 Nov 19:15 (leave Tue 03 Nov 14:10, 20 min by road to Mumbai Airport (BOM), flight MR102 Tue 03 Nov 15:30 -> 17:15, 100 min by road to Bengaluru office (Electronic City), arrive Tue 03 Nov 19:15)\n  - Priya would have to leave Bengaluru office (Electronic City) by Tue 03 Nov 14:20 to make being back at Delhi NCR office (Gurugram) by 23:00, but the meeting ends at Tue 03 Nov 15:30\n  - Priya will travel at most 360 min each way"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-03T14:00 (Tue) at Mumbai office (BKC) [bom_office]; 2026-11-04T13:30 (Wed) at Mumbai office (BKC) [bom_office]; 2026-11-04T13:15 (Wed) at Delhi NCR office (Gurugram) [del_office]"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How does meeting at our Mumbai office on Tuesday, November 3rd from 14:00 to 15:30 work for everyone?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Tue 03 Nov 14:00-15:30 (Asia/Kolkata) at Mumbai office (BKC) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That time works for me at the Mumbai office!"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "The Mumbai office works great for me on Tuesday afternoon. See you all then!"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-03T14:00 (Tue) at Mumbai office (BKC) [bom_office]."
+    }
+  ]
+}

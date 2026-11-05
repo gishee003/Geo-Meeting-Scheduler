@@ -26,6 +26,7 @@ from .llm import (DEFAULT_GEMINI_LITE_MODEL, DEFAULT_GEMINI_MODEL, DEFAULT_OLLAM
                   GeminiLLM, OllamaLLM)
 from .models import load_scenario
 from .negotiation import Negotiation, Outcome
+from .translate import translate_scenario
 
 PROVIDERS = ("gemini", "ollama")
 DEFAULT_CHAIN = f"gemini,gemini:{DEFAULT_GEMINI_LITE_MODEL},ollama"
@@ -119,13 +120,20 @@ def main(argv: list[str] | None = None) -> int:
     load_dotenv()
     sc = load_scenario(args.scenario)
     use_solver = not args.no_solver
-    agents, llm = build_agents(sc, args, use_solver)
+    intro = []
+    if args.agents == "llm" and use_solver:
+        llm = build_llm(args)
+        sc, records = translate_scenario(sc, llm)   # plain-language notes become solver rules
+        intro = [r.summary() for r in records]
+        agents = [LLMAgent(p, sc, llm, use_solver) for p in sc.participants()]
+    else:
+        agents, llm = build_agents(sc, args, use_solver)
 
     def show(entry):
         print(f"{entry.speaker}: {entry.text}\n")
 
     print(f"=== {sc.name} | agents: {args.agents} | referee: {'on' if use_solver else 'off'} ===\n")
-    neg = Negotiation(sc, agents, use_solver=use_solver, max_rounds=args.max_rounds, on_post=show)
+    neg = Negotiation(sc, agents, use_solver=use_solver, max_rounds=args.max_rounds, on_post=show, intro=intro)
     out = neg.run()
     print("=" * 60)
     print(summary(sc, neg.solver, out))

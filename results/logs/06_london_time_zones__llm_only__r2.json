@@ -1,0 +1,67 @@
+{
+  "row": {
+    "scenario": "06_london_time_zones",
+    "tier": "medium",
+    "system": "llm_only",
+    "repeat": 2,
+    "status": "agreed",
+    "correct": false,
+    "unsafe": true,
+    "valid": false,
+    "rescued": false,
+    "rounds": 2,
+    "proposals": 2,
+    "invalid_caught": 0,
+    "llm_calls": 5,
+    "input_tokens": 3458,
+    "output_tokens": 317,
+    "score": 0,
+    "best_score": 2,
+    "max_score": 3,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 30.442,
+    "model": "gemini-3.5-flash-lite",
+    "start": 2040,
+    "venue": "online",
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Cross-site planning' (60 min) for Asha, Rahul, Emma."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Tuesday, November 3rd from 10:00 to 11:00 at the Bengaluru office work for you?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That works well for me. See you all on Tuesday, November 3rd at 10:00 at the Bengaluru office!"
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Hi everyone! I can't travel to Bengaluru for that slot, but how about we meet online instead?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "That works for me too! Let's do online for that slot."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That works for me too! See you online on Tuesday, November 3rd at 10:00."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-03T10:00 (Tue) at Online (video call) [online]."
+    }
+  ]
+}

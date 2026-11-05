@@ -1,0 +1,111 @@
+{
+  "row": {
+    "scenario": "02_busy_week",
+    "tier": "medium",
+    "system": "heuristic",
+    "repeat": 1,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 8,
+    "best_score": 8,
+    "max_score": 11,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 0.493,
+    "model": null,
+    "start": 3720,
+    "venue": null,
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Quarterly planning' (90 min) for Asha, Rahul, Priya, Vikram."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-03T09:00 (Tue)?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 09:00-10:30 (Asia/Kolkata) breaks 2 hard constraint(s):\n  - Rahul is busy Tue 03 Nov 09:00-11:00 (Sprint planning)\n  - Priya works Mon, Tue, Wed, Thu, Fri 10:00-18:00 (Asia/Kolkata)"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T14:00 (Mon)?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 14:00-15:30 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Priya is busy Mon 02 Nov 14:00-16:00 (Customer demo)"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "proposal",
+      "text": "How about 2026-11-03T10:00 (Tue)?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 10:00-11:30 (Asia/Kolkata) breaks 1 hard constraint(s):\n  - Rahul is busy Tue 03 Nov 09:00-11:00 (Sprint planning)"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "proposal",
+      "text": "How about 2026-11-03T08:00 (Tue)?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Tue 03 Nov 08:00-09:30 (Asia/Kolkata) breaks 4 hard constraint(s):\n  - Asha works Mon, Tue, Wed, Thu, Fri 09:00-18:00 (Asia/Kolkata)\n  - Rahul works Mon, Tue, Wed, Thu, Fri 09:00-18:00 (Asia/Kolkata)\n  - Rahul is busy Tue 03 Nov 09:00-11:00 (Sprint planning)\n  - Priya works Mon, Tue, Wed, Thu, Fri 10:00-18:00 (Asia/Kolkata)"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-04T14:00 (Wed); 2026-11-03T11:00 (Tue)"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-04T14:00 (Wed)?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Wed 04 Nov 14:00-15:30 (Asia/Kolkata) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That works for Rahul."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "That works for Priya."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "That works for Vikram."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-04T14:00 (Wed)."
+    }
+  ]
+}

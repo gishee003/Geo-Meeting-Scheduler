@@ -1,0 +1,41 @@
+{
+  "row": {
+    "scenario": "03_impossible",
+    "tier": "impossible",
+    "system": "heuristic",
+    "repeat": 1,
+    "status": "impossible",
+    "correct": true,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": null,
+    "best_score": null,
+    "max_score": 0,
+    "travel": null,
+    "best_travel": null,
+    "runtime_s": 0.236,
+    "model": null,
+    "start": null,
+    "venue": null,
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Kick-off' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "NO VALID SLOT EXISTS. These hard constraints cannot all be satisfied together:\n  - Rahul is only available between 09:00 and 12:00 (Asia/Kolkata)\n  - Priya is only available between 14:00 and 18:00 (Asia/Kolkata)"
+    }
+  ]
+}

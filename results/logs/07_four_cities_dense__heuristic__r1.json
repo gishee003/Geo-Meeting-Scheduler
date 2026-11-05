@@ -1,0 +1,111 @@
+{
+  "row": {
+    "scenario": "07_four_cities_dense",
+    "tier": "hard",
+    "system": "heuristic",
+    "repeat": 1,
+    "status": "agreed",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 5,
+    "proposals": 5,
+    "invalid_caught": 4,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 7,
+    "best_score": 7,
+    "max_score": 7,
+    "travel": 710,
+    "best_travel": 710,
+    "runtime_s": 1.619,
+    "model": null,
+    "start": 3720,
+    "venue": "blr_kor_office",
+    "error": null
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Launch readiness' (60 min) for Asha, Vikram, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T09:00 (Mon) at Bengaluru office (Electronic City) [blr_ec_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 09:00-10:00 (Asia/Kolkata) at Bengaluru office (Electronic City) breaks 2 hard constraint(s):\n  - Rahul cannot reach Bengaluru office (Electronic City) by Mon 02 Nov 09:00: after start of day at Mumbai office (BKC) (free from Mon 02 Nov 06:00) the earliest arrival is Mon 02 Nov 12:45 (leave Mon 02 Nov 07:40, 20 min by road to Mumbai Airport (BOM), flight MR102 Mon 02 Nov 09:00 -> 10:45, 100 min by road to Bengaluru office (Electronic City), arrive Mon 02 Nov 12:45)\n  - Priya is busy Mon 02 Nov 09:00-10:00 (Board prep) at Delhi NCR office (Gurugram)"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T09:00 (Mon) at Bengaluru office (Koramangala) [blr_kor_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 09:00-10:00 (Asia/Kolkata) at Bengaluru office (Koramangala) breaks 3 hard constraint(s):\n  - Asha would have to leave Bengaluru office (Koramangala) by Mon 02 Nov 09:10 to make 'Design review' at Bengaluru office (Electronic City), but the meeting ends at Mon 02 Nov 10:00\n  - Rahul cannot reach Bengaluru office (Koramangala) by Mon 02 Nov 09:00: after start of day at Mumbai office (BKC) (free from Mon 02 Nov 06:00) the earliest arrival is Mon 02 Nov 12:30 (leave Mon 02 Nov 07:40, 20 min by road to Mumbai Airport (BOM), flight MR102 Mon 02 Nov 09:00 -> 10:45, 85 min by road to Bengaluru office (Koramangala), arrive Mon 02 Nov 12:30)\n  - Priya is busy Mon 02 Nov 09:00-10:00 (Board prep) at Delhi NCR office (Gurugram)"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "proposal",
+      "text": "How about 2026-11-02T14:00 (Mon) at Mumbai office (BKC) [bom_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Mon 02 Nov 14:00-15:00 (Asia/Kolkata) at Mumbai office (BKC) breaks 3 hard constraint(s):\n  - Asha is busy Mon 02 Nov 14:00-16:00 (Client workshop) at Bengaluru office (Koramangala)\n  - Vikram cannot fly (travels from Bengaluru office (Koramangala))\n  - Priya cannot reach Mumbai office (BKC) by Mon 02 Nov 14:00: after 'Board prep' at Delhi NCR office (Gurugram) (free from Mon 02 Nov 10:00) the earliest arrival is Mon 02 Nov 15:50 (leave Mon 02 Nov 11:25, 35 min by road to Delhi Airport (DEL), flight MR302 Mon 02 Nov 13:00 -> 15:10, 20 min by road to Mumbai office (BKC), arrive Mon 02 Nov 15:50)"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "proposal",
+      "text": "How about 2026-11-04T09:00 (Wed) at Delhi NCR office (Gurugram) [del_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "INVALID: Wed 04 Nov 09:00-10:00 (Asia/Kolkata) at Delhi NCR office (Gurugram) breaks 5 hard constraint(s):\n  - Asha cannot reach Delhi NCR office (Gurugram) by Wed 04 Nov 09:00: after start of day at Bengaluru office (Electronic City) (free from Wed 04 Nov 06:00) the earliest arrival is Wed 04 Nov 13:15 (leave Wed 04 Nov 06:50, 100 min by road to Bengaluru Airport (BLR), flight MR201 Wed 04 Nov 09:30 -> 12:20, 35 min by road to Delhi NCR office (Gurugram), arrive Wed 04 Nov 13:15)\n  - Asha would have to leave Delhi NCR office (Gurugram) by Wed 04 Nov 07:25 to make 'Budget review' at Bengaluru office (Electronic City), but the meeting ends at Wed 04 Nov 10:00\n  - Vikram is busy Wed 04 Nov 09:00-11:00 (Ops review) at Bengaluru office (Koramangala)\n  - Vikram cannot fly (travels from Bengaluru office (Koramangala))\n  - Rahul cannot reach Delhi NCR office (Gurugram) by Wed 04 Nov 09:00: after start of day at Mumbai office (BKC) (free from Wed 04 Nov 06:00) the earliest arrival is Wed 04 Nov 13:05 (leave Wed 04 Nov 08:40, 20 min by road to Mumbai Airport (BOM), flight MR301 Wed 04 Nov 10:00 -> 12:10, 35 min by road to Delhi NCR office (Gurugram), arrive Wed 04 Nov 13:05)"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "Hint - these slots are valid for everyone: 2026-11-04T14:00 (Wed) at Bengaluru office (Koramangala) [blr_kor_office]; 2026-11-04T14:00 (Wed) at Bengaluru office (Electronic City) [blr_ec_office]; 2026-11-04T15:00 (Wed) at Bengaluru office (Electronic City) [blr_ec_office]"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "How about 2026-11-04T14:00 (Wed) at Bengaluru office (Koramangala) [blr_kor_office]?"
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "VALID: Wed 04 Nov 14:00-15:00 (Asia/Kolkata) at Bengaluru office (Koramangala) satisfies every hard constraint."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "That works for Vikram."
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "That works for Rahul."
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "That works for Priya."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-04T14:00 (Wed) at Bengaluru office (Koramangala) [blr_kor_office]."
+    }
+  ]
+}

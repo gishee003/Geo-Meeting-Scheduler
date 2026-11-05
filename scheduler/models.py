@@ -8,7 +8,7 @@ keeps the Z3 encoding simple and makes time zones a data-loading concern.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -60,6 +60,11 @@ class Person:
     base: str | None = None
     earliest_departure: time = time(6, 0)
     return_by: time | None = time(23, 0)
+    # Plain-language requests. Only an LLM can read these. `truth_*` holds the
+    # hand-written formal meaning, used only to score results, never shown to agents.
+    notes: list[str] = field(default_factory=list)
+    truth_hard: list[Rule] = field(default_factory=list)
+    truth_soft: list[Rule] = field(default_factory=list)
 
 
 @dataclass
@@ -209,6 +214,9 @@ def scenario_from_dict(data: dict, base_dir: str | Path = ".") -> Scenario:
             base=p.get("base"),
             earliest_departure=_parse_time(p.get("earliest_departure", "06:00")),
             return_by=_parse_time(return_by) if return_by else None,
+            notes=list(p.get("notes", [])),
+            truth_hard=[_parse_rule(r, soft=False) for r in p.get("note_truth", {}).get("hard_constraints", [])],
+            truth_soft=[_parse_rule(r, soft=True) for r in p.get("note_truth", {}).get("preferences", [])],
         )
 
     missing = [pid for pid in meeting.participants if pid not in scenario.people]
@@ -217,6 +225,20 @@ def scenario_from_dict(data: dict, base_dir: str | Path = ".") -> Scenario:
     if scenario.geo_enabled:
         _check_geo(scenario)
     return scenario
+
+
+def with_rules(sc: Scenario, pid: str, hard: list[Rule], soft: list[Rule]) -> Scenario:
+    """A copy of the scenario with extra rules added to one person."""
+    p = sc.people[pid]
+    person = replace(p, hard_constraints=p.hard_constraints + hard, preferences=p.preferences + soft)
+    return replace(sc, people=sc.people | {pid: person})
+
+
+def with_truth(sc: Scenario) -> Scenario:
+    """The scenario including what people's plain-language notes really mean."""
+    for p in sc.participants():
+        sc = with_rules(sc, p.id, p.truth_hard, p.truth_soft)
+    return sc
 
 
 def _check_geo(sc: Scenario) -> None:

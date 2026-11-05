@@ -1,0 +1,87 @@
+{
+  "row": {
+    "scenario": "08_global_five_people",
+    "tier": "hard",
+    "system": "llm_only",
+    "repeat": 2,
+    "status": "agreed",
+    "correct": false,
+    "unsafe": true,
+    "valid": false,
+    "rescued": false,
+    "rounds": 2,
+    "proposals": 2,
+    "invalid_caught": 0,
+    "llm_calls": 9,
+    "input_tokens": 7233,
+    "output_tokens": 578,
+    "score": 0,
+    "best_score": 3,
+    "max_score": 4,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 65.261,
+    "model": "gemini-3.5-flash-lite",
+    "start": 600,
+    "venue": "online",
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Global roadmap' (90 min) for Asha, Rahul, Priya, Vikram, Emma."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone, how does Monday the 2nd of November at 10:00 at our Bengaluru office work for this?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, I'm busy then due to travel time from Mumbai. How about we do this online instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hello everyone! Monday at 10:00 in Bengaluru doesn't work for me due to travel time, but an online meeting works much better."
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "Hi everyone, I cannot make Monday at 10:00 at the Electronic City office as it conflicts with my travel and schedule. Online sounds great though!"
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Hi everyone! I can't travel to Bengaluru on short notice, but an online meeting works well for me."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "An online meeting works well for me too, let's go with that slot!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Online on Monday at 10:00 works well for me too. Let's lock it in!"
+    },
+    {
+      "speaker": "Vikram",
+      "kind": "reply",
+      "text": "That works for me! Online at that time is great."
+    },
+    {
+      "speaker": "Emma",
+      "kind": "reply",
+      "text": "Online on Monday at 10:00 works well for me. Let's do it!"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Agreed: 2026-11-02T10:00 (Mon) at Online (video call) [online]."
+    }
+  ]
+}

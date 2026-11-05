@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "05_multi_city_flights",
+    "tier": "medium",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "solved",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 3,
+    "best_score": 3,
+    "max_score": 3,
+    "travel": 570,
+    "best_travel": 570,
+    "runtime_s": 0.069,
+    "model": null,
+    "start": 2280,
+    "venue": "bom_office",
+    "error": null
+  },
+  "transcript": []
+}

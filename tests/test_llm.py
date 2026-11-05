@@ -2,6 +2,7 @@ import json
 import os
 from types import SimpleNamespace
 
+import httpx
 import ollama
 import pytest
 from google.genai import errors
@@ -72,6 +73,13 @@ def test_gemini_api_error_becomes_llm_error():
     client, _ = gemini_client(error=err)
     with pytest.raises(LLMError, match="429"):
         GeminiLLM(client=client).json("s", "p", SCHEMA)
+
+
+def test_gemini_network_failure_is_temporary():
+    client, _ = gemini_client(error=httpx.ConnectError("getaddrinfo failed"))
+    with pytest.raises(LLMError, match="network error") as e:
+        GeminiLLM(client=client).json("s", "p", SCHEMA)
+    assert e.value.transient
 
 
 # --- Ollama -------------------------------------------------------------------------

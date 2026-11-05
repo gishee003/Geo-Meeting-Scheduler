@@ -3,3 +3,4 @@ tzdata
 pytest
 google-genai>=2.33
 ollama>=0.6
+matplotlib>=3.9

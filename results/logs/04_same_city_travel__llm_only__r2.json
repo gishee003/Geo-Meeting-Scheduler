@@ -1,0 +1,127 @@
+{
+  "row": {
+    "scenario": "04_same_city_travel",
+    "tier": "easy",
+    "system": "llm_only",
+    "repeat": 2,
+    "status": "no_agreement",
+    "correct": false,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 8,
+    "proposals": 8,
+    "invalid_caught": 0,
+    "llm_calls": 17,
+    "input_tokens": 16771,
+    "output_tokens": 1596,
+    "score": null,
+    "best_score": 2,
+    "max_score": 2,
+    "travel": null,
+    "best_travel": 100,
+    "runtime_s": 220.902,
+    "model": "gemini-3.5-flash-lite",
+    "start": null,
+    "venue": null,
+    "error": null,
+    "notes_translated": 0
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Design huddle' (60 min) for Asha, Rahul, Priya."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "proposal",
+      "text": "Hi everyone! How does Monday, November 2nd at 11:30 work for our design huddle at the Koramangala office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, I'm busy then and also need to factor in travel to Koramangala. Would 2026-11-02T15:00 at the Electronic City office work better for everyone?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Rahul, 2pm or 3pm at Electronic City works well for Priya! Let's do 2026-11-02T15:00 at the Electronic City office."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi Rahul and Priya, 15:00 at Electronic City doesn't work for me due to travel time constraints. Could we meet at 14:00 at the Koramangala office instead?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi everyone, 14:00 at the Koramangala office works for Priya too. Let's go with that!"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi everyone, I have a vendor visit ending at 14:00 at Electronic City, so I won't have enough time to travel to Koramangala for a 14:00 start. How about 15:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Rahul, 15:00 at the Electronic City office works well for Priya too. Let's confirm that!"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi Rahul and Priya, I still can't make 15:00 at Electronic City because of travel constraints. Would 15:30 at the Koramangala office work for everyone?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, 15:30 at Koramangala doesn't work for Priya. How about 11:30 at the Electronic City office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Priya, I can't do 11:30 at Electronic City either. How about we meet at 15:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Rahul, 15:00 at Electronic City works well for Priya! Let's go with that."
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi Rahul and Priya, 15:00 at Electronic City still doesn't work for me because I cannot travel there in time. How about we meet at 11:30 at the Koramangala office?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, 11:30 at Koramangala doesn't work for Priya. How about 10:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Rahul",
+      "kind": "reply",
+      "text": "Hi Asha, I'm busy then and can't make it to Koramangala by that time. How about 2026-11-02T10:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, 11:30 at Koramangala doesn't work for Priya. How about 10:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Asha",
+      "kind": "reply",
+      "text": "Hi Rahul, I have a client workshop until 11:00 at Koramangala and cannot make it to Electronic City for 10:00. Would 11:30 at the Koramangala office work for everyone?"
+    },
+    {
+      "speaker": "Priya",
+      "kind": "reply",
+      "text": "Hi Asha, 11:30 at Koramangala doesn't work for Priya. How about 10:00 at the Electronic City office?"
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "No agreement after 8 rounds."
+    }
+  ]
+}

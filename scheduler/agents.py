@@ -144,6 +144,9 @@ class LLMAgent(Agent):
         if me.soft:
             lines.append("Preferences (nice to have; higher importance matters more):")
             lines += [f"  - {c.text} (importance {c.weight})" for c in me.soft]
+        if p.notes:
+            lines.append(f"Notes from {p.name}, in their own words (treat these as their real wishes):")
+            lines += [f'  - "{n}"' for n in p.notes]
         if sc.geo_enabled:
             lines.append(f"One-way travel from {sc.location_name(p.base)} to each candidate venue:")
             for v, minutes in zip(sc.meeting.venues, me.cost[p.id]):

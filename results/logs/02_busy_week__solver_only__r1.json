@@ -1,0 +1,30 @@
+{
+  "row": {
+    "scenario": "02_busy_week",
+    "tier": "medium",
+    "system": "solver_only",
+    "repeat": 1,
+    "status": "solved",
+    "correct": true,
+    "unsafe": false,
+    "valid": true,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "score": 8,
+    "best_score": 8,
+    "max_score": 11,
+    "travel": 0,
+    "best_travel": 0,
+    "runtime_s": 0.028,
+    "model": null,
+    "start": 3720,
+    "venue": null,
+    "error": null
+  },
+  "transcript": []
+}
