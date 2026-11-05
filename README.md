@@ -1,6 +1,6 @@
 # Geo-Aware Multi-Agent Meeting Scheduler
 
-AID 851 (Machine Reasoning) project. LLM agents negotiate a meeting time, and a Z3 solver checks that every proposal is valid. See [PLAN.md](PLAN.md) for the roadmap.
+AID 851 (Machine Reasoning) project. LLM agents negotiate a meeting time, and a Z3 solver checks that every proposal is valid.
 
 ## Setup
 ```bash
