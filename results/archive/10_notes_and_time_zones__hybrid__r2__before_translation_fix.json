@@ -1,0 +1,47 @@
+{
+  "row": {
+    "scenario": "10_notes_and_time_zones",
+    "tier": "combined",
+    "system": "hybrid",
+    "repeat": 2,
+    "status": "impossible",
+    "correct": false,
+    "unsafe": false,
+    "valid": false,
+    "rescued": false,
+    "rounds": 0,
+    "proposals": 0,
+    "invalid_caught": 0,
+    "llm_calls": 1,
+    "input_tokens": 286,
+    "output_tokens": 123,
+    "score": null,
+    "best_score": 2,
+    "max_score": 4,
+    "travel": null,
+    "best_travel": 0,
+    "runtime_s": 7.683,
+    "model": "gemini-3.5-flash-lite",
+    "start": null,
+    "venue": null,
+    "error": null,
+    "notes_translated": 1
+  },
+  "transcript": [
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Let's schedule 'Partner onboarding' (60 min) for Asha, Rahul, Emma."
+    },
+    {
+      "speaker": "Mediator",
+      "kind": "system",
+      "text": "Must-follow rule from Asha's note \"I have physiotherapy on Tuesday and Wednesday afternoons from 15:00, so I can't take anything after 3 pm on those days.\": Asha is only available between 00:00 and 15:00 (Asia/Kolkata)."
+    },
+    {
+      "speaker": "Referee",
+      "kind": "referee",
+      "text": "NO VALID SLOT EXISTS. These hard constraints cannot all be satisfied together:\n  - Emma works Mon, Tue, Wed, Thu, Fri 09:00-17:00 (Europe/London)\n  - Asha is only available between 00:00 and 15:00 (Asia/Kolkata)"
+    }
+  ]
+}

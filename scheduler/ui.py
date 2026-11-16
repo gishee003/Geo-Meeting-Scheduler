@@ -13,7 +13,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from .agents import SYSTEM_KINDS, HeuristicAgent, LLMAgent, personal_solver
+from .agents import SYSTEM_KINDS, LLMAgent, personal_solver
 from .evaluate import TIERS, run_solver_only
 from .llm import DEFAULT_GEMINI_LITE_MODEL, DEFAULT_OLLAMA_MODEL, FallbackLLM, GeminiLLM, OllamaLLM
 from .models import DAY_NAMES, Scenario, load_scenario, with_truth
@@ -29,7 +29,6 @@ RESULTS_DIR = ROOT / "results"
 MODES = {
     "hybrid": "Hybrid: AI agents + solver referee (ours)",
     "llm_only": "LLM only: AI agents, no referee",
-    "heuristic": "Rule-based agents + solver referee",
     "solver_only": "Solver only: no negotiation",
 }
 LLM_MODES = ("hybrid", "llm_only")
@@ -167,9 +166,6 @@ def run_live(sc: Scenario, mode: str, specs: list[str], max_rounds: int,
     """Run one negotiation, streaming each message to `on_post`."""
     if mode == "solver_only":
         return run_solver_only(MeetingSolver(sc)), None
-    if mode == "heuristic":
-        agents = [HeuristicAgent(p, sc) for p in sc.participants()]
-        return Negotiation(sc, agents, max_rounds=max_rounds, on_post=on_post).run(), None
     llm = make_llm(specs)
     intro = []
     if mode == "hybrid":

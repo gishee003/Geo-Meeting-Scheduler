@@ -46,7 +46,7 @@ SCHEMA = {
 SYSTEM = """You convert a person's plain-English scheduling notes into formal rules for a logic solver.
 
 Rule kinds:
-- only_between: the meeting must lie inside start-end every day
+- only_between: the meeting must lie inside start-end, on the listed days (empty days = every day)
 - blocked_window: the meeting must not overlap start-end, on the listed days (empty days = every day)
 - avoid_days: the meeting must not fall on the listed days
 - prefer_days: the meeting should fall on one of the listed days
@@ -89,7 +89,7 @@ def _to_rule(raw: dict) -> Rule:
         params |= {"start": raw["start"], "end": raw["end"]}
     if kind in ("avoid_days", "prefer_days") and not raw["days"]:
         raise ValueError("no days given")
-    if raw["days"] and kind != "only_between":
+    if raw["days"]:
         params["days"] = raw["days"]
     return Rule(rule_type, params, 0 if hard else max(1, min(3, int(raw.get("importance") or 1))))
 

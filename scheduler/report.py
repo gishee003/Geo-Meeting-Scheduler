@@ -14,13 +14,12 @@ from collections import defaultdict
 from pathlib import Path
 from statistics import mean
 
-SYSTEM_LABELS = {"hybrid": "Hybrid (ours)", "llm_only": "LLM only", "solver_only": "Solver only",
-                 "heuristic": "Rule-based agents"}
-SYSTEM_ORDER = ["hybrid", "llm_only", "solver_only", "heuristic"]
-TIER_ORDER = ["easy", "medium", "hard", "impossible", "plain-language"]
+SYSTEM_LABELS = {"hybrid": "Hybrid (ours)", "llm_only": "LLM only", "solver_only": "Solver only"}
+SYSTEM_ORDER = ["hybrid", "llm_only", "solver_only"]
+TIER_ORDER = ["easy", "medium", "hard", "impossible", "plain-language", "combined"]
 
 # Colors follow the system, never its rank (validated for color-blind separation).
-SYSTEM_COLORS = {"hybrid": "#2a78d6", "llm_only": "#eb6834", "solver_only": "#1baf7a", "heuristic": "#eda100"}
+SYSTEM_COLORS = {"hybrid": "#2a78d6", "llm_only": "#eb6834", "solver_only": "#1baf7a"}
 OUTCOME_COLORS = {"correct": "#0ca30c", "unsafe": "#d03b3b", "none": "#a3a29c"}
 OUTCOME_LABELS = {"correct": "Correct result", "unsafe": "Impossible meeting scheduled", "none": "No meeting, nothing proved"}
 SURFACE, INK, MUTED, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e6e5e0"
@@ -88,7 +87,7 @@ def system_summary(rows: list[dict]) -> list[dict]:
             "none": sum(outcome_of(r) == "none" for r in rs),
             "rescued": sum(r["rescued"] for r in rs),
             "rounds": avg(r["rounds"] for r in rs) if negotiated else None,
-            "caught": avg(r["invalid_caught"] for r in rs) if system in ("hybrid", "heuristic") else None,
+            "caught": avg(r["invalid_caught"] for r in rs) if system == "hybrid" else None,
             "ratio": avg(ratios),
             "extra_travel": avg(extra),
             "calls": avg(r["llm_calls"] for r in rs),
@@ -123,7 +122,8 @@ def write_tables(rows: list[dict], path: Path) -> None:
                   "includes the 7 s spacing between free-tier calls.", ""]
 
     lines += ["## By tier (correct runs)", "",
-              "| Tier | " + " | ".join(SYSTEM_LABELS[s] for s in SYSTEM_ORDER) + " |", "|---|---|---|---|---|"]
+              "| Tier | " + " | ".join(SYSTEM_LABELS[s] for s in SYSTEM_ORDER) + " |",
+              "|---" * (len(SYSTEM_ORDER) + 1) + "|"]
     tiers = group(rows, "tier")
     for tier in TIER_ORDER:
         cells = []
@@ -224,7 +224,7 @@ def chart_preferences(rows: list[dict], path: Path) -> None:
 
     names = sorted({r["scenario"] for r in rows if r["best_score"]})
     series = {}
-    for system in ("hybrid", "heuristic"):
+    for system in ("hybrid", "llm_only"):
         series[system] = []
         for n in names:
             ratio = avg(score_ratio(r) for r in rows if r["scenario"] == n and r["system"] == system)
@@ -235,7 +235,9 @@ def chart_preferences(rows: list[dict], path: Path) -> None:
     ax.set_ylabel("Preference score, % of solver's best", color=MUTED)
     ax.set_title("Valid is not always best: hybrid can settle below the solver's best slot", loc="left", color=INK,
                  fontsize=13, fontweight="bold", pad=12)
-    fig.tight_layout()
+    fig.text(0.01, 0.01, "Valid meetings only. No bar: that system produced no valid meeting in any run of the "
+             "scenario.", color=MUTED, fontsize=8)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
     fig.savefig(path, dpi=200, facecolor=SURFACE)
     plt.close(fig)
 

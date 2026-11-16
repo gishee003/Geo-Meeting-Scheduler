@@ -23,7 +23,7 @@ The five tabs:
 1. **Scenario:** people, rules, plain-English notes, calendars and a map.
 2. **Negotiation:** the conversation, with the referee's verdicts in green or red.
 3. **Result:** the final slot checked by the solver, the travel plan, the calendar and the map.
-4. **Showcase:** AI alone next to AI + solver on the same scenario (default: London time zones).
+4. **Showcase:** AI alone, solver alone and AI + solver side by side on the same scenario (default: scenario 10, where both single approaches fail).
 5. **Phase 4 results:** the experiment numbers and charts.
 
 ## Quick test commands (Windows PowerShell)
@@ -39,13 +39,10 @@ Run these from the project folder.
 # 3. Only the local model (run 'ollama pull qwen3:4b' first; close heavy apps)
 .venv\Scripts\python -m scheduler.negotiate data\scenarios\04_same_city_travel.json --providers ollama
 
-# 4. Offline rule-based agents: no AI, instant
-.venv\Scripts\python -m scheduler.negotiate data\scenarios\05_multi_city_flights.json --agents heuristic
-
-# 5. All automatic tests
+# 4. All automatic tests
 .venv\Scripts\python -m pytest -q
 
-# 6. Phase 4 experiments (resumable), then tables and charts
+# 5. Phase 4 experiments (resumable), then tables and charts
 .venv\Scripts\python -u -m scheduler.evaluate
 .venv\Scripts\python -m scheduler.report
 ```
@@ -63,6 +60,7 @@ Swap the scenario file in any command to try another case:
 | `07_four_cities_dense.json` | Hard: four people, three cities, packed calendars |
 | `08_global_five_people.json` | Hard: five people across India and London |
 | `09_plain_language_notes.json` | Requests in everyday English that the AI must translate |
+| `10_notes_and_time_zones.json` | Both single approaches fail: a plain-English note the solver can't read plus a London time-zone trap for the AI; one valid slot |
 
 Compare commands 1 and 2: without the referee, check whether the agents agree on a slot that is actually impossible. The final summary marks it **INVALID**. Every run is saved as a JSON log in `runs\`.
 
@@ -76,9 +74,6 @@ python -m pytest
 
 ### Negotiation (Phase 3)
 ```bash
-# Offline: rule-based agents, no API key needed
-python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --agents heuristic
-
 # LLM agents, using the first provider that works: Gemini Flash -> Gemini Flash-Lite -> Ollama
 python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json
 python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --providers ollama
@@ -109,7 +104,7 @@ Each run prints the conversation live and writes a JSON log to `runs/`. The log 
 | `scheduler/solver.py` | Z3 encoding: `verify`, `suggest`, `diagnose`, `explain` |
 | `scheduler/cli.py` | Command-line runner for the solver |
 | `scheduler/protocol.py` | Shared public board: proposals, replies, referee messages |
-| `scheduler/agents.py` | `LLMAgent` (Gemini or Ollama) and `HeuristicAgent` (offline), one per participant |
+| `scheduler/agents.py` | `LLMAgent` (Gemini or Ollama), one per participant |
 | `scheduler/llm.py` | LLM providers (Gemini, Ollama) with JSON-schema output, plus the fallback chain |
 | `scheduler/env.py` | Loads API keys from a git-ignored `.env` file |
 | `scheduler/negotiation.py` | Negotiation loop with the solver as referee (or without, as a baseline) |
@@ -179,12 +174,12 @@ Each run prints the conversation live and writes a JSON log to `runs/`. The log 
   | **Hint** | After round 4 without agreement: 3 valid slots are posted | — |
   | **Fallback** | After the last round: the solver's best valid slot is used | Status `no_agreement` (no fallback) |
 - **`--no-solver`** removes the referee. The agreed slot is still checked afterwards, so the LLM-only baseline can be scored in Phase 4.
-- **Offline agents:** `HeuristicAgent` is a rule-based stand-in that uses a one-person solver for its own constraints. It makes runs reproducible and free, and powers the tests.
 
 ### Evaluation (Phase 4)
-- `scheduler/evaluate.py` runs four systems on every scenario: **LLM only**, **solver only**, **hybrid** and **rule-based agents**. The two LLM systems are repeated 3 times (`--repeats`). Each run is saved to `results/logs/` and the script resumes after an interruption. One model is used throughout; if it fails, the run stops rather than mixing models.
+- `scheduler/evaluate.py` runs three systems on every scenario: **LLM only**, **solver only** and **hybrid**. The two LLM systems are repeated 3 times (`--repeats`). Each run is saved to `results/logs/` and the script resumes after an interruption. One model is used throughout; if it fails, the run stops rather than mixing models.
 - Every result is scored against the solver's ground truth, including what people's plain-language notes really mean (`note_truth` in the scenario, never shown to agents). **Correct** means a valid meeting, or a proof of impossibility on the impossible scenario.
 - `scheduler/report.py` writes `results/summary.md` (tables) and `results/charts/` (outcomes, preference score, LLM calls).
+- `results/archive/` keeps one hybrid run from scenario 10 that failed because of a since-fixed translation bug (a day-limited "only available between" rule lost its days). All three hybrid runs were re-run after the fix.
 - **Plain-language notes:** in hybrid, `scheduler/translate.py` has the LLM turn each person's `notes` into formal rules, which the solver then enforces. Each translated rule is posted in the conversation, because the solver guarantees the rules, not the translation.
 
 ## Scenario format
@@ -224,7 +219,7 @@ Each rule type below can be used as a hard constraint or as a soft preference (s
 
 | Hard type | Soft counterpart | Parameters | Meaning |
 |---|---|---|---|
-| `only_between` | `prefer_time_window` | `start`, `end` | The meeting must lie inside this daily window |
+| `only_between` | `prefer_time_window` | `start`, `end`, optional `days` | The meeting must lie inside this daily window (only on the listed days, if given) |
 | `blocked_window` | `avoid_window` | `start`, `end`, optional `days`, `label` | No overlap with this daily window (e.g. lunch) |
 | `no_meetings_on_days` | `avoid_days` | `days` | No overlap with these weekdays |
 | — | `prefer_days` | `days` | The meeting falls on one of these weekdays |

@@ -59,10 +59,9 @@ def test_figures_render(stem):
     assert (ui.map_figure(sc, best.venue) is None) == (not sc.geo_enabled)
 
 
-def test_heuristic_live_run_streams_messages():
-    posted = []
-    out, llm = ui.run_live(ui.load("04_same_city_travel"), "heuristic", [], 8, posted.append)
-    assert out.status == "agreed" and llm is None and posted[0].speaker == "Mediator"
+def test_solver_only_live_run_needs_no_ai():
+    out, llm = ui.run_live(ui.load("04_same_city_travel"), "solver_only", [], 8, lambda e: None)
+    assert out.status == "solved" and llm is None
 
 
 def test_live_llm_run_needs_a_provider(monkeypatch):

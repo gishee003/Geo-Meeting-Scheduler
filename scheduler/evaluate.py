@@ -4,7 +4,6 @@ Systems
     llm_only    - LLM agents, no referee (final slot is checked afterwards)
     solver_only - Z3 alone: no negotiation, no LLM
     hybrid      - LLM agents with the solver as referee (our approach)
-    heuristic   - rule-based agents with the referee (deterministic comparison)
 
 The LLM systems are repeated because LLM replies vary between runs. Each run
 is saved as one JSON log in <out>/logs, and <out>/runs.csv is rebuilt from
@@ -26,7 +25,7 @@ import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from .agents import HeuristicAgent, LLMAgent
+from .agents import LLMAgent
 from .env import load_dotenv
 from .llm import DEFAULT_GEMINI_LITE_MODEL, LLM, FallbackLLM, GeminiLLM, LLMError
 from .models import Scenario, load_scenario, with_truth
@@ -35,7 +34,7 @@ from .solver import MeetingSolver
 from .translate import translate_scenario
 
 SCENARIOS = Path("data/scenarios")
-SYSTEMS = ("llm_only", "solver_only", "hybrid", "heuristic")
+SYSTEMS = ("llm_only", "solver_only", "hybrid")
 LLM_SYSTEMS = ("llm_only", "hybrid")
 TIERS = {
     "01_simple_team_sync": "easy",
@@ -47,6 +46,7 @@ TIERS = {
     "07_four_cities_dense": "hard",
     "08_global_five_people": "hard",
     "09_plain_language_notes": "plain-language",
+    "10_notes_and_time_zones": "combined",
 }
 FIELDS = ["scenario", "tier", "system", "repeat", "status", "correct", "unsafe", "valid", "rescued",
           "rounds", "proposals", "invalid_caught", "llm_calls", "input_tokens", "output_tokens",
@@ -122,10 +122,6 @@ def run_solver_only(solver: MeetingSolver) -> Outcome:
     return Outcome("solved", best[0].start, best[0].venue, best[0].verdict)
 
 
-def run_heuristic(sc: Scenario) -> Outcome:
-    return Negotiation(sc, [HeuristicAgent(p, sc) for p in sc.participants()]).run()
-
-
 def run_llm(sc: Scenario, llm: LLM, use_solver: bool, max_rounds: int = 8) -> tuple[Outcome, list]:
     """Hybrid first turns plain-language notes into solver rules; LLM-only agents just read them."""
     records, intro = [], []
@@ -146,8 +142,6 @@ def run_once(name: str, sc: Scenario, system: str, repeat: int, truth: Truth,
     before = (llm.usage.calls, llm.usage.input_tokens, llm.usage.output_tokens) if llm else (0, 0, 0)
     if system == "solver_only":
         out = run_solver_only(MeetingSolver(sc))
-    elif system == "heuristic":
-        out = run_heuristic(sc)
     else:
         chain = FallbackLLM([llm])  # same model only; retries temporary errors, never switches model
         out, records = run_llm(sc, chain, system == "hybrid", max_rounds)

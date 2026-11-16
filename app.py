@@ -17,7 +17,7 @@ st.set_page_config(page_title="Geo-Aware Meeting Scheduler", page_icon="📅", l
 load_dotenv(ui.ROOT / ".env")
 
 AVATARS = {"Mediator": "🧭", "Referee": "⚖️"}
-SHOWCASE_DEFAULT = "06_london_time_zones"
+SHOWCASE_DEFAULT = "10_notes_and_time_zones"
 
 
 @st.cache_resource
@@ -184,28 +184,37 @@ with tab_res:
 # --- 4. showcase ----------------------------------------------------------------------------
 
 with tab_show:
-    st.markdown("Same scenario, same AI model (Gemini Flash-Lite). **Left:** the AI agents negotiate alone. "
-                "**Right:** the same agents, but the solver checks every proposal. Both are saved runs from "
-                "the Phase 4 experiment.")
+    st.markdown("The same scenario solved three ways, all saved runs from the Phase 4 experiment with the same AI "
+                "model (Gemini Flash-Lite). **AI alone:** agents negotiate with nobody checking. **Solver alone:** "
+                "computes the answer but cannot read plain English. **AI + solver:** the AI understands people, "
+                "the solver checks every proposal.")
     stems = [s for s, _, _ in scenarios]
     show_stem = st.selectbox("Showcase scenario", stems, index=stems.index(SHOWCASE_DEFAULT),
                              format_func=labels.get, key="showcase")
     ssc = scenario(show_stem)
-    left, right = st.columns(2)
-    for col, system, title in ((left, "llm_only", "🤖 AI alone"), (right, "hybrid", "🤖 + ⚖️ AI + solver (ours)")):
+    columns = st.columns(3)
+    panels = (("llm_only", "🤖 AI alone"), ("solver_only", "⚖️ Solver alone"), ("hybrid", "🤖 + ⚖️ AI + solver (ours)"))
+    for col, (system, title) in zip(columns, panels):
         with col:
             st.subheader(title)
             paths = ui.saved_runs(show_stem, system)
             if not paths:
                 st.info("No saved run.")
                 continue
-            # Prefer a run that shows the typical failure of AI alone.
+            # Prefer a run that shows each single approach's typical failure.
             chosen = paths[0]
-            if system == "llm_only":
+            if system != "hybrid":
                 chosen = next((p for p in paths if ui.load_saved(p)[0]["unsafe"]), paths[0])
             row, entries = ui.load_saved(chosen)
             start = int(row["start"]) if row["start"] not in (None, "") else None
             show_verdict(ssc, row["status"], start, row["venue"], compact=True)
+            if system == "solver_only":
+                st.caption("No conversation: the solver computed this slot directly from the formal rules. "
+                           "It never saw anything written only in plain English.")
+                notes = [f"{p.name}: \"{n}\"" for p in ssc.participants() for n in p.notes]
+                if notes:
+                    st.markdown("**Notes the solver could not read:**\n\n" + "\n\n".join(f"- {n}" for n in notes))
+                continue
             with st.container(height=520):
                 for e in entries:
                     show_entry(e)

@@ -282,10 +282,20 @@ class MeetingSolver:
 
         if t in ("only_between", "prefer_time_window"):
             start, end = time.fromisoformat(prm["start"]), time.fromisoformat(prm["end"])
-            windows = self._windows(p, start, end)
-            expr = z3.Or([_inside(S, D, a, b) for a, b in windows])
+            days = prm.get("days")
+            if days:
+                # Only on the listed days: there the meeting may not stick out of the window.
+                outside = []
+                for d, midnight in sc.local_days(p.tz):
+                    if DAY_NAMES[d.weekday()] in days:
+                        a, b = sc.local_window(d, start, end, p.tz)
+                        outside += [(midnight, a), (b, midnight + 24 * 60)]
+                expr = z3.And([z3.Not(_overlaps(S, D, a, b)) for a, b in outside])
+            else:
+                expr = z3.Or([_inside(S, D, a, b) for a, b in self._windows(p, start, end)])
             verb = "is only available" if t == "only_between" else "prefers meetings"
-            text = f"{p.name} {verb} between {_hhmm(start)} and {_hhmm(end)} ({p.tz.key})"
+            on = f" on {', '.join(days)}" if days else ""
+            text = f"{p.name} {verb} between {_hhmm(start)} and {_hhmm(end)}{on} ({p.tz.key})"
 
         elif t in ("blocked_window", "avoid_window"):
             start, end = time.fromisoformat(prm["start"]), time.fromisoformat(prm["end"])

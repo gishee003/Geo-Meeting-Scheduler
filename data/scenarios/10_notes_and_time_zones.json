@@ -1,0 +1,53 @@
+{
+  "name": "Physio and London: both single approaches fail",
+  "description": "Asha (Bengaluru), Rahul (Mumbai) and Emma (London) need one hour. Asha's physiotherapy is only in a plain-English note, which a solver cannot read; the London time difference is a trap the AI alone keeps falling into. Exactly one slot works for everyone.",
+  "timezone": "Asia/Kolkata",
+  "geo": "../geo/world.json",
+  "horizon": { "start": "2026-11-02", "days": 3 },
+  "slot_minutes": 15,
+  "meeting": {
+    "title": "Partner onboarding",
+    "duration_minutes": 60,
+    "participants": ["asha", "rahul", "emma"],
+    "venues": ["blr_ec_office", "online"]
+  },
+  "people": [
+    {
+      "id": "asha",
+      "name": "Asha",
+      "timezone": "Asia/Kolkata",
+      "base": "blr_ec_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Client review", "start": "2026-11-02T14:30", "end": "2026-11-02T16:00" }
+      ],
+      "notes": ["I have physiotherapy on Tuesday and Wednesday afternoons from 15:00, so I can't take anything after 3 pm on those days."],
+      "note_truth": {
+        "hard_constraints": [{ "type": "blocked_window", "start": "15:00", "end": "18:00", "days": ["Tue", "Wed"] }]
+      }
+    },
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "timezone": "Asia/Kolkata",
+      "base": "bom_office",
+      "working_hours": { "start": "09:00", "end": "18:00" },
+      "calendar": [
+        { "title": "Sprint review", "start": "2026-11-02T17:00", "end": "2026-11-02T18:00" }
+      ],
+      "preferences": [
+        { "type": "prefer_days", "days": ["Tue"], "weight": 2 }
+      ]
+    },
+    {
+      "id": "emma",
+      "name": "Emma",
+      "timezone": "Europe/London",
+      "base": "lon_office",
+      "working_hours": { "start": "09:00", "end": "17:00" },
+      "preferences": [
+        { "type": "prefer_time_window", "start": "10:00", "end": "13:00", "weight": 2 }
+      ]
+    }
+  ]
+}

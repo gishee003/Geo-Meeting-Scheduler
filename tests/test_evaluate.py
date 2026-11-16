@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from scheduler.evaluate import (LLM_SYSTEMS, Truth, TIERS, ground_truth, is_correct, is_unsafe, make_row, plan,
-                                run_heuristic, run_solver_only)
+                                run_solver_only)
 from scheduler.models import load_scenario, with_truth
 from scheduler.negotiation import Outcome
 from scheduler.solver import MeetingSolver
@@ -47,11 +47,11 @@ def test_only_scenario_03_is_impossible():
 
 
 def test_plan_repeats_only_llm_systems():
-    jobs = plan(["a", "b"], ["llm_only", "solver_only", "hybrid", "heuristic"], 3)
-    assert len(jobs) == 2 * (3 * len(LLM_SYSTEMS) + 2)
+    jobs = plan(["a", "b"], ["llm_only", "solver_only", "hybrid"], 3)
+    assert len(jobs) == 2 * (3 * len(LLM_SYSTEMS) + 1)
     assert ("a", "solver_only", 2) not in jobs
     assert ("b", "hybrid", 3) in jobs
-    assert [j[2] for j in jobs[:4]] == [1, 1, 1, 1]  # first repeat sweeps everything first
+    assert [j[2] for j in jobs[:3]] == [1, 1, 1]  # first repeat sweeps everything first
 
 
 def test_solver_only_is_correct_everywhere():
@@ -61,13 +61,6 @@ def test_solver_only_is_correct_everywhere():
         row = make_row(name, "solver_only", 1, truth, run_solver_only(s), 0.1)
         assert row["correct"], name
         assert row["llm_calls"] == 0
-
-
-def test_rule_based_agents_handle_hard_scenarios():
-    for name in ("07_four_cities_dense", "08_global_five_people"):
-        sc = load_scenario(SCENARIOS / f"{name}.json")
-        out = run_heuristic(sc)
-        assert out.status in ("agreed", "fallback") and out.valid
 
 
 def test_make_row_records_a_failed_llm_agreement():
@@ -147,3 +140,52 @@ def test_notes_reach_llm_agents_but_truth_does_not():
     asha = LLMAgent(sc.people["asha"], sc, TranslatorLLM([]))
     assert "family wedding" in asha.system
     assert "no_meetings_on_days" not in asha.system
+
+
+# --- scenario 10: both single approaches fail -------------------------------------------
+
+BOTH = "10_notes_and_time_zones"
+
+
+def test_scenario_10_has_exactly_one_valid_slot():
+    sc = load_scenario(SCENARIOS / f"{BOTH}.json")
+    truth = MeetingSolver(with_truth(sc))
+    valid = [(t, v) for t in range(0, sc.horizon_end, sc.slot_minutes) for v in sc.meeting.venues
+             if truth.verify(t, v).valid]
+    assert valid == [(sc.parse_local("2026-11-02T16:00", sc.display_tz), "online")]
+
+
+def test_scenario_10_solver_alone_breaks_the_note():
+    sc = load_scenario(SCENARIOS / f"{BOTH}.json")
+    best = MeetingSolver(sc).suggest(1)[0]
+    verdict = MeetingSolver(with_truth(sc)).verify(best.start, best.venue)
+    assert not verdict.valid
+    assert [c.id for c in verdict.violations] == ["asha:hard:0"]   # the physiotherapy note
+
+
+def test_scenario_10_india_morning_is_dawn_in_london():
+    sc = load_scenario(SCENARIOS / f"{BOTH}.json")
+    v = MeetingSolver(with_truth(sc)).verify(sc.parse_local("2026-11-03T10:00", sc.display_tz), "online")
+    assert [c.id for c in v.violations] == ["emma:working_hours"]
+
+
+def test_scenario_10_translated_note_leads_to_the_only_valid_slot():
+    sc = load_scenario(SCENARIOS / f"{BOTH}.json")
+    translated, _ = translate_scenario(sc, TranslatorLLM([[rule("blocked_window", "hard", "15:00", "18:00",
+                                                                ["Tue", "Wed"])]]))
+    best = MeetingSolver(translated).suggest(1)[0]
+    assert (best.start, best.venue) == (sc.parse_local("2026-11-02T16:00", sc.display_tz), "online")
+
+
+def test_day_limited_only_between_keeps_its_days():
+    # Regression: "only available 00:00-15:00 on Tue, Wed" once lost its days and blocked every afternoon.
+    sc = load_scenario(SCENARIOS / f"{BOTH}.json")
+    translated, records = translate_scenario(sc, TranslatorLLM([[rule("only_between", "hard", "00:00", "15:00",
+                                                                     ["Tue", "Wed"])]]))
+    assert records[0].rule.params["days"] == ["Tue", "Wed"]
+    assert "on Tue, Wed" in records[0].text
+    s = MeetingSolver(translated)
+    assert s.verify(sc.parse_local("2026-11-02T16:00", sc.display_tz), "online").valid       # Monday is free
+    assert not s.verify(sc.parse_local("2026-11-03T15:30", sc.display_tz), "online").valid   # Tuesday is not
+    best = s.suggest(1)[0]
+    assert (best.start, best.venue) == (sc.parse_local("2026-11-02T16:00", sc.display_tz), "online")

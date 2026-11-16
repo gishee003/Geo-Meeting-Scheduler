@@ -1,16 +1,9 @@
 """Negotiating agents, one per participant.
 
-Each agent knows only its own person's calendar, rules and preferences. Two
-implementations share one interface:
-
-  LLMAgent       - talks through an LLM: Gemini or a local Ollama model
-                   (the neural half of the system)
-  HeuristicAgent - deterministic, offline stand-in used for tests and for
-                   running without an API key; it checks proposals against
-                   its own person's rules with a one-person solver
-
-Both receive the public Board and return a Proposal or a Reply; the
-negotiation loop decides what the referee (full solver) gets to check.
+Each agent knows only its own person's calendar, rules and preferences.
+LLMAgent talks through an LLM (Gemini or a local Ollama model): the neural
+half of the system. Agents receive the public Board and return a Proposal or
+a Reply; the negotiation loop decides what the referee (full solver) checks.
 """
 
 from __future__ import annotations
@@ -25,17 +18,6 @@ from .solver import MeetingSolver
 
 SYSTEM_KINDS = {"horizon", "slot_grid", "venue_domain"}
 DESCRIBED_ELSEWHERE = {"working_hours", "busy", "reach_venue", "onward_travel"}
-
-# Privacy-preserving reasons an agent gives when it declines a slot.
-REASONS = {
-    "busy": "already has a commitment then",
-    "working_hours": "is outside working hours then",
-    "reach_venue": "cannot travel to that venue in time",
-    "onward_travel": "would not make the next commitment after the meeting",
-    "horizon": "cannot do a slot outside the planning window",
-    "slot_grid": "needs a start on the slot grid",
-}
-
 
 def personal_solver(sc: Scenario, pid: str) -> MeetingSolver:
     """A solver that knows only one person's constraints."""
@@ -57,48 +39,6 @@ class Agent(ABC):
 
     @abstractmethod
     def respond(self, board: Board, proposal: Proposal) -> Reply: ...
-
-
-# ---------------------------------------------------------------------- offline
-
-class HeuristicAgent(Agent):
-    """Rule-based negotiator: proposes its own best slots, accepts anything its person can do."""
-
-    def __init__(self, person: Person, scenario: Scenario, options: int = 12):
-        super().__init__(person, scenario)
-        self.options = [(o.start, o.venue) for o in self.me.suggest(options, min_gap=scenario.slot_minutes)]
-
-    def _ok(self, start: int, venue: str | None) -> bool:
-        return self.me.verify(start, venue).valid
-
-    def _next_idea(self, board: Board) -> tuple[int, str | None] | None:
-        hints = [s for s in board.suggestions if self._ok(*s)]
-        for slot in hints + self.options:
-            if slot not in board.tried:
-                return slot
-        return None
-
-    def propose(self, board: Board) -> Proposal:
-        idea = self._next_idea(board) or (self.options[0] if self.options else None)
-        if idea is None:
-            return Proposal(self.person.id, "", None, f"{self.name} has no free slot at all.")
-        start, venue = idea
-        return Proposal(self.person.id, board.iso(start), venue,
-                        f"How about {board.slot(start, venue)}?", start)
-
-    def respond(self, board: Board, proposal: Proposal) -> Reply:
-        v = self.me.verify(proposal.start, proposal.venue)
-        if v.valid:
-            return Reply(self.person.id, True, f"That works for {self.name}.")
-        reason = REASONS.get(v.violations[0].kind, "has a rule that rules this out")
-        idea = self._next_idea(board)
-        counter = None
-        text = f"Sorry, {self.name} {reason}."
-        if idea:
-            start, venue = idea
-            counter = Proposal(self.person.id, board.iso(start), venue, "", start)
-            text += f" Could we do {board.slot(start, venue)} instead?"
-        return Reply(self.person.id, False, text, counter)
 
 
 # -------------------------------------------------------------------------- LLM

@@ -1,7 +1,6 @@
 """Run a negotiation between agents, refereed by the solver.
 
 Examples
-    python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --agents heuristic
     python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json             # LLM agents
     python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --providers gemini,ollama
     python -m scheduler.negotiate data/scenarios/05_multi_city_flights.json --no-solver  # LLM-only baseline
@@ -20,7 +19,7 @@ from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
-from .agents import HeuristicAgent, LLMAgent
+from .agents import LLMAgent
 from .env import load_dotenv
 from .llm import (DEFAULT_GEMINI_LITE_MODEL, DEFAULT_GEMINI_MODEL, DEFAULT_OLLAMA_MODEL, FallbackLLM,
                   GeminiLLM, OllamaLLM)
@@ -48,7 +47,7 @@ def build_llm(args) -> FallbackLLM:
         else:
             chain.append(OllamaLLM(model=model or args.ollama_model, think=True if args.ollama_think else None))
     if not chain:
-        raise SystemExit("No LLM provider available - set an API key, start Ollama, or use --agents heuristic")
+        raise SystemExit("No LLM provider available - set GEMINI_API_KEY or start Ollama")
 
     def switched(failed: str, reason: str, nxt: str | None) -> None:
         print(f"[llm] {failed} failed: {reason}")
@@ -62,8 +61,6 @@ def build_llm(args) -> FallbackLLM:
 
 
 def build_agents(sc, args, use_solver: bool):
-    if args.agents == "heuristic":
-        return [HeuristicAgent(p, sc) for p in sc.participants()], None
     llm = build_llm(args)
     return [LLMAgent(p, sc, llm, use_solver) for p in sc.participants()], llm
 
@@ -81,7 +78,6 @@ def summary(sc, solver, out: Outcome) -> str:
 def save(path: Path, scenario_path: str, args, out: Outcome, llm) -> None:
     record = {
         "scenario": scenario_path,
-        "agents": args.agents,
         "use_solver": not args.no_solver,
         "providers": [p.name for p in llm.providers] if llm else None,
         "served_by": {p.name: asdict(p.usage) for p in llm.providers if p.usage.calls} if llm else None,
@@ -106,7 +102,6 @@ def save(path: Path, scenario_path: str, args, out: Outcome, llm) -> None:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Negotiate a meeting with one agent per participant.")
     ap.add_argument("scenario")
-    ap.add_argument("--agents", choices=["llm", "heuristic"], default="llm")
     ap.add_argument("--providers", default=DEFAULT_CHAIN,
                     help=f"LLM fallback order, comma-separated 'name' or 'name:model' (default: {DEFAULT_CHAIN})")
     ap.add_argument("--no-solver", action="store_true", help="LLM-only baseline: no referee during negotiation")
@@ -121,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
     sc = load_scenario(args.scenario)
     use_solver = not args.no_solver
     intro = []
-    if args.agents == "llm" and use_solver:
+    if use_solver:
         llm = build_llm(args)
         sc, records = translate_scenario(sc, llm)   # plain-language notes become solver rules
         intro = [r.summary() for r in records]
@@ -132,7 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     def show(entry):
         print(f"{entry.speaker}: {entry.text}\n")
 
-    print(f"=== {sc.name} | agents: {args.agents} | referee: {'on' if use_solver else 'off'} ===\n")
+    print(f"=== {sc.name} | referee: {'on' if use_solver else 'off'} ===\n")
     neg = Negotiation(sc, agents, use_solver=use_solver, max_rounds=args.max_rounds, on_post=show, intro=intro)
     out = neg.run()
     print("=" * 60)
@@ -146,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     mode = "hybrid" if use_solver else "llm-only"
-    path = Path(args.save or f"runs/{Path(args.scenario).stem}_{args.agents}_{mode}_{stamp}.json")
+    path = Path(args.save or f"runs/{Path(args.scenario).stem}_{mode}_{stamp}.json")
     save(path, args.scenario, args, out, llm)
     print(f"Log saved to {path}")
     return 0 if out.status in ("agreed", "fallback") else 1

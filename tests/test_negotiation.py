@@ -2,63 +2,18 @@ from pathlib import Path
 
 import pytest
 
-from scheduler.agents import Agent, HeuristicAgent, LLMAgent
+from scheduler.agents import Agent, LLMAgent
 from scheduler.llm import LLM, LLMError
 from scheduler.models import load_scenario
 from scheduler.negotiation import Negotiation
 from scheduler.protocol import Proposal, Reply
+from scheduler.solver import MeetingSolver
 
 SCENARIOS = Path(__file__).resolve().parent.parent / "data" / "scenarios"
 
 
 def scenario(name):
     return load_scenario(SCENARIOS / name)
-
-
-def heuristic(sc):
-    return [HeuristicAgent(p, sc) for p in sc.participants()]
-
-
-# --- negotiation loop with offline agents ---------------------------------------
-
-@pytest.mark.parametrize("name", ["01_simple_team_sync.json", "04_same_city_travel.json",
-                                  "05_multi_city_flights.json", "06_london_time_zones.json"])
-def test_heuristic_agents_reach_valid_agreement(name):
-    sc = scenario(name)
-    out = Negotiation(sc, heuristic(sc)).run()
-    assert out.status == "agreed"
-    assert out.valid
-
-
-def test_impossible_scenario_stops_before_negotiating():
-    sc = scenario("03_impossible.json")
-    out = Negotiation(sc, heuristic(sc)).run()
-    assert out.status == "impossible"
-    assert out.proposals == 0
-    assert "NO VALID SLOT" in out.transcript[-1].text
-
-
-def test_referee_catches_invalid_proposals():
-    sc = scenario("01_simple_team_sync.json")
-    out = Negotiation(sc, heuristic(sc)).run()
-    assert out.invalid_caught > 0
-    assert any(e.speaker == "Referee" and e.text.startswith("INVALID") for e in out.transcript)
-
-
-def test_round_limit_falls_back_to_solver():
-    sc = scenario("01_simple_team_sync.json")
-    out = Negotiation(sc, heuristic(sc), max_rounds=1).run()
-    assert out.status == "fallback"
-    assert out.valid
-
-
-def test_without_solver_there_is_no_referee():
-    sc = scenario("05_multi_city_flights.json")
-    out = Negotiation(sc, heuristic(sc), use_solver=False).run()
-    assert not any(e.speaker == "Referee" for e in out.transcript)
-    assert out.invalid_caught == 0
-    if out.status == "agreed":
-        assert out.verdict is not None  # still scored afterwards
 
 
 class Scripted(Agent):
@@ -74,6 +29,58 @@ class Scripted(Agent):
 
     def respond(self, board, proposal):
         return Reply(self.person.id, True, "ok")
+
+
+def best_slot(sc):
+    best = MeetingSolver(sc).suggest(1)[0]
+    return sc.to_datetime(best.start).strftime("%Y-%m-%dT%H:%M"), best.venue
+
+
+def scripted(sc, *proposals):
+    """First agent makes `proposals` in turn; the others propose the solver's best slot."""
+    people = sc.participants()
+    return [Scripted(people[0], sc, proposals)] + [Scripted(p, sc, [best_slot(sc)]) for p in people[1:]]
+
+
+# --- negotiation loop ---------------------------------------------------------------
+
+@pytest.mark.parametrize("name", ["01_simple_team_sync.json", "04_same_city_travel.json",
+                                  "05_multi_city_flights.json", "06_london_time_zones.json"])
+def test_valid_proposal_is_agreed(name):
+    sc = scenario(name)
+    out = Negotiation(sc, scripted(sc, best_slot(sc))).run()
+    assert out.status == "agreed" and out.valid and out.rounds == 1
+
+
+def test_impossible_scenario_stops_before_negotiating():
+    sc = scenario("03_impossible.json")
+    out = Negotiation(sc, [Scripted(p, sc, []) for p in sc.participants()]).run()
+    assert out.status == "impossible"
+    assert out.proposals == 0
+    assert "NO VALID SLOT" in out.transcript[-1].text
+
+
+def test_referee_catches_invalid_proposals():
+    sc = scenario("01_simple_team_sync.json")
+    out = Negotiation(sc, scripted(sc, ("2026-11-02T10:00", None))).run()   # Asha never meets on Mondays
+    assert out.invalid_caught == 1
+    assert any(e.speaker == "Referee" and e.text.startswith("INVALID") for e in out.transcript)
+    assert out.status == "agreed" and out.valid
+
+
+def test_round_limit_falls_back_to_solver():
+    sc = scenario("01_simple_team_sync.json")
+    out = Negotiation(sc, scripted(sc, ("2026-11-02T10:00", None)), max_rounds=1).run()
+    assert out.status == "fallback"
+    assert out.valid
+
+
+def test_without_solver_there_is_no_referee():
+    sc = scenario("05_multi_city_flights.json")
+    out = Negotiation(sc, scripted(sc, best_slot(sc)), use_solver=False).run()
+    assert not any(e.speaker == "Referee" for e in out.transcript)
+    assert out.invalid_caught == 0
+    assert out.verdict is not None and out.valid   # still scored afterwards
 
 
 def test_malformed_proposal_is_not_considered():
